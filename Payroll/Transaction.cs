@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TransactionNS
+namespace Payroll
+
 {
-   interface Transaction
+   public interface Transaction
    {
-      void Execute();
+      public void Execute();
    }
 }

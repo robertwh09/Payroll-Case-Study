@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PaymentClassificationNS
+namespace Payroll
 {
-   interface PaymentClassification
+   public interface PaymentClassification
    {
+      public double CalculatePay(Paycheck paycheck);
    }
 }

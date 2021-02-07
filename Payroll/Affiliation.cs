@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AffiliationNS
+namespace Payroll
 {
-   interface Affiliation
+   public interface Affiliation
    {
+      double CalculateDeductions(Paycheck paycheck);
    }
 }

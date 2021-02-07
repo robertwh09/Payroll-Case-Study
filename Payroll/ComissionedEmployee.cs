@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EmployeeNS
+namespace Payroll
 {
-   class ComissionedEmployee : Employee
+   public class ComissionedEmployee : Employee
    {
+      public ComissionedEmployee(int empid, string name, string address) : base(empid, name, address)
+      {
+      }
    }
 }

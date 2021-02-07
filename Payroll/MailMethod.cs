@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PaymentMethodNS
+namespace Payroll
 {
-   class MailMethod : PaymentMethod
+   public class MailMethod : PaymentMethod
    {
+      public void Pay(Paycheck paycheck)
+      {
+         throw new NotImplementedException();
+      }
    }
 }

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PaymentMethodNS
+namespace Payroll
 {
-   class PaymentMethod
+   public interface PaymentMethod
    {
+      public void Pay(Paycheck paycheck);
    }
 }

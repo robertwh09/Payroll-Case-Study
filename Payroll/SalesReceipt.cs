@@ -2,9 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PaymentClassificationNS
+namespace Payroll
 {
-   class SalesReceipt
+   public class SalesReceipt
    {
+      public SalesReceipt(DateTime date, double saleAmount)
+      {
+         Date = date;
+         SaleAmount = saleAmount;
+      }
+
+      public DateTime Date { get; }
+      public double SaleAmount { get; }
    }
 }

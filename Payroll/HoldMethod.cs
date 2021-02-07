@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PaymentMethodNS
+namespace Payroll
 {
-   class HoldMethod : PaymentMethod
+   public class HoldMethod : PaymentMethod
    {
+		public void Pay(Paycheck paycheck)
+		{
+			paycheck.SetField("Disposition", "Hold");
+		}
    }
 }

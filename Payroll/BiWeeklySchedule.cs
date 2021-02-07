@@ -4,14 +4,14 @@ using System.Text;
 
 namespace Payroll
 {
-   public class DirectMethod : PaymentMethod
+   public class BiWeeklySchedule : PaymentSchedule
    {
-      void Pay(Paycheck paycheck)
+      DateTime PaymentSchedule.GetPayPeriodStartDate(DateTime date)
       {
          throw new NotImplementedException();
       }
 
-      void PaymentMethod.Pay(Paycheck paycheck)
+      bool PaymentSchedule.IsPayDate(DateTime date)
       {
          throw new NotImplementedException();
       }
