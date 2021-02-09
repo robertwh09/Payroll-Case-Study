@@ -9,7 +9,7 @@ namespace Payroll.Tests
    public class TimeCardUseCaseTests
    {
       [TestMethod()]
-      public void TimeCardTransactionTest()
+      public void TimeCardUseCaseTest()
       {
          int empId = 5;
          double hourlyRate = 15.25;

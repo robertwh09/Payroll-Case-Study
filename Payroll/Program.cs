@@ -8,8 +8,7 @@ namespace Payroll
    {
       static void Main(string[] args)
       {
-         Console.WriteLine("Hello World!");
-         //Employee e = new SalariedEmployee();
+         Console.WriteLine("Hello World! from the Uncle Bob Payroll Program");
          
       }
    }

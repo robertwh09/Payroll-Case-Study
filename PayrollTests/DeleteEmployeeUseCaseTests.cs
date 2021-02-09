@@ -10,7 +10,7 @@ namespace Payroll.Tests
    public class DeleteEmployeeUseCaseTests
    {
       [TestMethod()]
-      public void DeleteEmployeeTransactionTest()
+      public void DeleteEmployeeUseCaseTest()
       {
          int empId = 4;
          int salary = 2500;

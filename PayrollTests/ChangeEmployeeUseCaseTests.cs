@@ -10,7 +10,7 @@ namespace Payroll.Tests
    public class ChangeEmployeeUseCaseTests
    {
       [TestMethod()]
-      public void ChangeNameTransactionTest()
+      public void ChangeNameUseCaseTest()
       {
          int empId = 2;
          AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Bill", "Home", 15.25);
@@ -25,7 +25,7 @@ namespace Payroll.Tests
       }
 
       [TestMethod()]
-      public void ChangeHourlyTransactionTest()
+      public void ChangeHourlyUseCaseTest()
       {
          int empId = 3;
          AddCommissionedEmployeeUseCase t =

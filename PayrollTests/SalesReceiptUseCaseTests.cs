@@ -10,7 +10,7 @@ namespace Payroll.Tests
    public class SalesReceiptUseCaseTests
    {
       [TestMethod()]
-      public void SalesReceiptTransactionTest()
+      public void SalesReceiptUseCaseTest()
       {
          int empId = 2;
          AddCommissionedEmployeeUseCase t = new AddCommissionedEmployeeUseCase(empId, "Bill", "Home", 1000, 13.5);

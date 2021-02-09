@@ -10,7 +10,7 @@ namespace Payroll.Tests
    public class ServiceChargeUseCaseTests
    {
       [TestMethod()]
-      public void ServiceChargeTransactionTest()
+      public void ServiceChargeUseCaseTest()
       {
          int empId = 2;
          AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Bill", "Home", 15.25);
