@@ -1,8 +1,8 @@
 ﻿namespace Payroll
 {
-   public abstract class ChangeClassificationTransaction : ChangeEmployeeTransaction
+   public abstract class ChangeClassificationUseCase : ChangeEmployeeUseCase
    {
-      public ChangeClassificationTransaction(int id)
+      public ChangeClassificationUseCase(int id)
       : base(id)
       { }
       protected override void Change(Employee e)

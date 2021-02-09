@@ -6,16 +6,16 @@ using System.Text;
 namespace Payroll.Tests
 {
    [TestClass()]
-   public class TimeCardTransactionTests
+   public class TimeCardUseCaseTests
    {
       [TestMethod()]
       public void TimeCardTransactionTest()
       {
          int empId = 5;
          double hourlyRate = 15.25;
-         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", hourlyRate);
+         AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Bill", "Home", hourlyRate);
          t.Execute();
-         TimeCardTransaction tct = new TimeCardTransaction(new DateTime(2005, 7, 31), 8.0, empId);
+         TimeCardUseCase tct = new TimeCardUseCase(new DateTime(2005, 7, 31), 8.0, empId);
          tct.Execute();
          Employee e = PayrollDatabase.GetEmployee(empId);
          Assert.IsNotNull(e);

@@ -36,7 +36,7 @@ namespace Payroll
 
       public static void RemoveUnionMember(int memberId)
       {
-         throw new NotImplementedException();
+         unionMembers.Remove(memberId);
       }
 
       public static Employee GetUnionMember(int memberId)

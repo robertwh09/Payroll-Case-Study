@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Payroll
 {
-   public class AddHourlyEmployee : AddEmployeeTransaction
+   public class AddHourlyEmployeeUseCase : AddEmployeeUseCase
    {
       private double hourlyRate;
-      public AddHourlyEmployee(int empID, string name, string address, double hourlyRate) : base(empID, name, address)
+      public AddHourlyEmployeeUseCase(int empID, string name, string address, double hourlyRate) : base(empID, name, address)
       {
          this.hourlyRate = hourlyRate;
       }

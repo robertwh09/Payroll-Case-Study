@@ -7,7 +7,7 @@ using System.Text;
 namespace Payroll.Tests
 {
    [TestClass()]
-   public class DeleteEmployeeTransactionTests
+   public class DeleteEmployeeUseCaseTests
    {
       [TestMethod()]
       public void DeleteEmployeeTransactionTest()
@@ -15,12 +15,12 @@ namespace Payroll.Tests
          int empId = 4;
          int salary = 2500;
          double commissionRate = 3.2;
-         AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill", "Home", salary, commissionRate);
+         AddCommissionedEmployeeUseCase t = new AddCommissionedEmployeeUseCase(empId, "Bill", "Home", salary, commissionRate);
          t.Execute();
          Employee e = PayrollDatabase.GetEmployee(empId);
          Assert.IsNotNull(e);
-         DeleteEmployeeTransaction dt =
-         new DeleteEmployeeTransaction(empId);
+         DeleteEmployeeUseCase dt =
+         new DeleteEmployeeUseCase(empId);
          dt.Execute();
          e = PayrollDatabase.GetEmployee(empId);
          Assert.IsNull(e);

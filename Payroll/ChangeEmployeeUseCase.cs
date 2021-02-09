@@ -4,10 +4,12 @@ using System.Text;
 
 namespace Payroll
 {
-   public abstract class ChangeEmployeeTransaction : Transaction
+   //Template Pattern used here.  All changes require the Employee to be retrieved
+   //But the specific change needed is 'Change' by the subclass specific to the type of change
+   public abstract class ChangeEmployeeUseCase : UseCase
    {
       private readonly int empId;
-      public ChangeEmployeeTransaction(int empId)
+      public ChangeEmployeeUseCase(int empId)
       {
          this.empId = empId;
       }

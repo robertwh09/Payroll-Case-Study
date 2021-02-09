@@ -3,12 +3,12 @@ using System.Collections;
 
 namespace Payroll
 {
-	public class PaydayTransaction : Transaction
+	public class PaydayUseCase : UseCase
 	{
 		private readonly DateTime payDate;
 		private Hashtable paychecks = new Hashtable();
 
-		public PaydayTransaction(DateTime payDate)
+		public PaydayUseCase(DateTime payDate)
 		{
 			this.payDate = payDate;
 		}

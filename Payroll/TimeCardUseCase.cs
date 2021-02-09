@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Payroll
 {
-   public class TimeCardTransaction : Transaction
+   public class TimeCardUseCase : UseCase
    {
       private readonly DateTime date;
       private readonly double hours;
       private readonly int empId;
-      public TimeCardTransaction(DateTime date, double hours, int empId)
+      public TimeCardUseCase(DateTime date, double hours, int empId)
       {
          this.date = date;
          this.hours = hours;

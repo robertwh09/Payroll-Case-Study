@@ -1,8 +1,8 @@
 ﻿namespace Payroll
 {
-   public class ChangeUnaffiliatedTransaction : ChangeAffiliationTransaction
+   public class ChangeUnaffiliatedUseCase : ChangeAffiliationUseCase
    {
-      public ChangeUnaffiliatedTransaction(int empId) : base(empId) { }
+      public ChangeUnaffiliatedUseCase(int empId) : base(empId) { }
       protected override Affiliation Affiliation => new NoAffiliation();
 
       protected override void RecordMembership(Employee e)

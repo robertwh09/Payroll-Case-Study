@@ -7,16 +7,16 @@ using System.Text;
 namespace Payroll.Tests
 {
    [TestClass()]
-   public class ChangeEmployeeTransactionTests
+   public class ChangeEmployeeUseCaseTests
    {
       [TestMethod()]
       public void ChangeNameTransactionTest()
       {
          int empId = 2;
-         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+         AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Bill", "Home", 15.25);
          t.Execute();
 
-         ChangeNameTransaction cnt = new ChangeNameTransaction(empId, "Bob");
+         ChangeNameUseCase cnt = new ChangeNameUseCase(empId, "Bob");
          cnt.Execute();
 
          Employee e = PayrollDatabase.GetEmployee(empId);
@@ -28,11 +28,11 @@ namespace Payroll.Tests
       public void ChangeHourlyTransactionTest()
       {
          int empId = 3;
-         AddCommissionedEmployee t =
-         new AddCommissionedEmployee(
+         AddCommissionedEmployeeUseCase t =
+         new AddCommissionedEmployeeUseCase(
          empId, "Lance", "Home", 2500, 3.2);
          t.Execute();
-         ChangeHourlyTransaction cht =  new ChangeHourlyTransaction(empId, 27.52);
+         ChangeHourlyUseCase cht =  new ChangeHourlyUseCase(empId, 27.52);
          cht.Execute();
          Employee e = PayrollDatabase.GetEmployee(empId);
          Assert.IsNotNull(e);
@@ -49,11 +49,11 @@ namespace Payroll.Tests
       public void ChangeUnionMember()
       {
          int empId = 8;
-         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+         AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Bill", "Home", 15.25);
          t.Execute();
          int memberId = 7743;
          double dues = 99.42;
-         ChangeMemberTransaction cmt = new ChangeMemberTransaction(empId, memberId, dues);
+         ChangeMemberUseCase cmt = new ChangeMemberUseCase(empId, memberId, dues);
          cmt.Execute();
 
          Employee e = PayrollDatabase.GetEmployee(empId);
@@ -61,11 +61,21 @@ namespace Payroll.Tests
          Affiliation affiliation = e.Affiliation;
          Assert.IsNotNull(affiliation);
          Assert.IsTrue(affiliation is UnionAffiliation);
+
          UnionAffiliation uf = affiliation as UnionAffiliation;
          Assert.AreEqual(dues, uf.Dues, 0.001);
          Employee member = PayrollDatabase.GetUnionMember(memberId);
          Assert.IsNotNull(member);
          Assert.AreEqual(e, member);
+
+         //Test removing Affiliation
+         ChangeUnaffiliatedUseCase cmt1 = new ChangeUnaffiliatedUseCase(empId);
+         cmt1.Execute();
+         e = PayrollDatabase.GetEmployee(empId);
+         Assert.IsNotNull(e);
+         affiliation = e.Affiliation;
+         Assert.IsNotNull(affiliation);
+         Assert.IsTrue(affiliation is NoAffiliation);
       }
    }
 }

@@ -5,7 +5,7 @@ using System.Text;
 namespace Payroll
 
 {
-   public interface Transaction
+   public interface UseCase
    {
       public void Execute();
    }

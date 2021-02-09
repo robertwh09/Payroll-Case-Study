@@ -7,13 +7,13 @@ using System.Text;
 namespace Payroll.Tests
 {
    [TestClass()]
-   public class SalesReceiptTransactionTests
+   public class SalesReceiptUseCaseTests
    {
       [TestMethod()]
-      public void ExecuteTest()
+      public void SalesReceiptTransactionTest()
       {
          int empId = 2;
-         AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill", "Home", 1000, 13.5);
+         AddCommissionedEmployeeUseCase t = new AddCommissionedEmployeeUseCase(empId, "Bill", "Home", 1000, 13.5);
          t.Execute();
 
          Employee e = PayrollDatabase.GetEmployee(empId);
@@ -21,7 +21,7 @@ namespace Payroll.Tests
 
          DateTime date = new DateTime(2005, 8, 8);
          double salesAmount = 505.25;
-         SalesReceiptTransaction srt = new SalesReceiptTransaction(date, salesAmount, empId);
+         SalesReceiptUseCase srt = new SalesReceiptUseCase(date, salesAmount, empId);
          srt.Execute();
 
          e = PayrollDatabase.GetEmployee(empId);

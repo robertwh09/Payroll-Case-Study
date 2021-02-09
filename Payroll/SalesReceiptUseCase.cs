@@ -4,13 +4,13 @@ using System.Text;
 
 namespace Payroll
 {
-   public class SalesReceiptTransaction : Transaction
+   public class SalesReceiptUseCase : UseCase
 	{
 		private readonly DateTime date;
 		private readonly double saleAmount;
 		private readonly int empId;
 
-		public SalesReceiptTransaction(DateTime time, double saleAmount, int empId)
+		public SalesReceiptUseCase(DateTime time, double saleAmount, int empId)
 		{
 			this.date = time;
 			this.saleAmount = saleAmount;

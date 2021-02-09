@@ -4,18 +4,22 @@ using System.Text;
 
 namespace Payroll
 {
-   public abstract class AddEmployeeTransaction : Transaction
+   public abstract class AddEmployeeUseCase : UseCase
    {
       private readonly int empid;
       private readonly string name;
       private readonly string address;
 
-      public AddEmployeeTransaction(int empid, string name, string address)
+      public AddEmployeeUseCase(int empid, string name, string address)
       {
          this.empid = empid;
          this.name = name;
          this.address = address;
       }
+
+      //Template pattern used to support the implementation of the MakeClassification and MakeSchedule methods
+      //within the subclasses of AddEmployeeUseCase
+      //All Employees need to make this objects but each employee type does it in a different way
 
       protected abstract PaymentClassification MakeClassification();
       protected abstract PaymentSchedule MakeSchedule();

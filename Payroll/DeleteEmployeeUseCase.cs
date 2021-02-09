@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Payroll
 {
-   public class DeleteEmployeeTransaction
+   public class DeleteEmployeeUseCase
    {
       private readonly int id;
-      public DeleteEmployeeTransaction(int id)
+      public DeleteEmployeeUseCase(int id)
       {
          this.id = id;
       }

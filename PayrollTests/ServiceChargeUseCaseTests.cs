@@ -7,13 +7,13 @@ using System.Text;
 namespace Payroll.Tests
 {
    [TestClass()]
-   public class ServiceChargeTransactionTests
+   public class ServiceChargeUseCaseTests
    {
       [TestMethod()]
       public void ServiceChargeTransactionTest()
       {
          int empId = 2;
-         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+         AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Bill", "Home", 15.25);
          t.Execute();
 
          Employee e = PayrollDatabase.GetEmployee(empId);
@@ -25,7 +25,7 @@ namespace Payroll.Tests
          DateTime date = new DateTime(2005, 8, 8);
 
          PayrollDatabase.AddUnionMember(memberId, e);
-         ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId, date, serviceCharge);
+         ServiceChargeUseCase sct = new ServiceChargeUseCase(memberId, date, serviceCharge);
          sct.Execute();
 
          e = PayrollDatabase.GetEmployee(empId);
