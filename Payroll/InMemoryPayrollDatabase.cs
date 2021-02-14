@@ -3,8 +3,7 @@
 namespace Payroll
 {
    public class InMemoryPayrollDatabase : IPayrollDatabase
-   {
-           
+   {     
       private static Hashtable employees = new Hashtable();
       private static Hashtable unionMembers = new Hashtable();
       public void AddEmployee(Employee employee)
