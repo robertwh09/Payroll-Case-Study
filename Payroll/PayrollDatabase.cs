@@ -1,52 +1,55 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections;
 
 namespace Payroll
 {
-   public class PayrollDatabase
+   public class InMemoryPayrollDatabase : IPayrollDatabase
    {
+           
       private static Hashtable employees = new Hashtable();
       private static Hashtable unionMembers = new Hashtable();
-      public static void AddEmployee(int id, Employee employee)
+      public void AddEmployee(Employee employee)
       {
-         employees[id] = employee;
+         employees[employee.EmpId] = employee;
       }
 
-      public static ArrayList GetAllEmployeeIds()
+      public Employee GetEmployee(int id)
+      {
+         return employees[id] as Employee;
+      }
+
+      public void DeleteEmployee(int id)
+      {
+         employees.Remove(id);
+      }
+
+      public void AddUnionMember(int id, Employee e)
+      {
+         unionMembers[id] = e;
+      }
+
+      public Employee GetUnionMember(int id)
+      {
+         return unionMembers[id] as Employee;
+      }
+
+      public void RemoveUnionMember(int memberId)
+      {
+         unionMembers.Remove(memberId);
+      }
+
+      public ArrayList GetAllEmployeeIds()
       {
          ArrayList arrayList = new ArrayList();
-         foreach(DictionaryEntry e in employees)
+         foreach (DictionaryEntry e in employees)
          {
             arrayList.Add(e.Key);
          }
          return arrayList;
       }
 
-      public static void DeleteEmployee(int id)
+      public IList GetAllEmployees()
       {
-         employees.Remove(id);
-      }
-
-      public static Employee GetEmployee(int id)
-      {
-         return employees[id] as Employee;
-      }
-
-      public static void RemoveUnionMember(int memberId)
-      {
-         unionMembers.Remove(memberId);
-      }
-
-      public static Employee GetUnionMember(int memberId)
-      {
-         return unionMembers[memberId] as Employee;
-      }
-
-      public static void AddUnionMember(int memberId, Employee e)
-      {
-         unionMembers[memberId] = e;
+         throw new System.NotImplementedException();
       }
    }
 }

@@ -2,8 +2,7 @@
 {
    public abstract class ChangeClassificationUseCase : ChangeEmployeeUseCase
    {
-      public ChangeClassificationUseCase(int id)
-      : base(id)
+      public ChangeClassificationUseCase(int id, InMemoryPayrollDatabase database) : base(id, database)
       { }
       protected override void Change(Employee e)
       {

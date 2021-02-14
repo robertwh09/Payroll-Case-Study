@@ -4,16 +4,16 @@ using System.Text;
 
 namespace Payroll
 {
-   public class DeleteEmployeeUseCase
+   public class DeleteEmployeeUseCase : UseCase
    {
       private readonly int id;
-      public DeleteEmployeeUseCase(int id)
+      public DeleteEmployeeUseCase(int id, InMemoryPayrollDatabase database) : base (database)
       {
          this.id = id;
       }
-      public void Execute()
+      public override void Execute()
       {
-         PayrollDatabase.DeleteEmployee(id);
+         database.DeleteEmployee(id);
       }
    }
 }

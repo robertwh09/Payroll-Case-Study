@@ -10,7 +10,7 @@ namespace Payroll
       private readonly string name;
       private readonly string address;
 
-      public AddEmployeeUseCase(int empid, string name, string address)
+      public AddEmployeeUseCase(int empid, string name, string address, InMemoryPayrollDatabase database) : base (database)
       {
          this.empid = empid;
          this.name = name;
@@ -24,7 +24,7 @@ namespace Payroll
       protected abstract PaymentClassification MakeClassification();
       protected abstract PaymentSchedule MakeSchedule();
 
-      public void Execute()
+      public override void Execute()
       {
          PaymentClassification pc = MakeClassification();
          PaymentSchedule ps = MakeSchedule();
@@ -34,7 +34,7 @@ namespace Payroll
          e.Classification = pc;
          e.Schedule = ps;
          e.Method = pm;
-         PayrollDatabase.AddEmployee(empid, e);
+         database.AddEmployee(e);
       }
    }
 }

@@ -3,7 +3,7 @@
    public class ChangeHourlyUseCase : ChangeClassificationUseCase
    {
       private readonly double hourlyRate;
-      public ChangeHourlyUseCase(int id, double hourlyRate) : base(id)
+      public ChangeHourlyUseCase(int id, double hourlyRate, InMemoryPayrollDatabase database) : base(id, database)
       {
          this.hourlyRate = hourlyRate;
       }

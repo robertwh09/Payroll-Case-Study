@@ -9,15 +9,15 @@ namespace Payroll
       private readonly DateTime date;
       private readonly double hours;
       private readonly int empId;
-      public TimeCardUseCase(DateTime date, double hours, int empId)
+      public TimeCardUseCase(DateTime date, double hours, int empId, InMemoryPayrollDatabase database) : base (database)
       {
          this.date = date;
          this.hours = hours;
          this.empId = empId;
       }
-      public void Execute()
+      public override void Execute()
       {
-         Employee e = PayrollDatabase.GetEmployee(empId);
+         Employee e = database.GetEmployee(empId);
          if (e != null)
          {
             HourlyClassification hc = e.Classification as HourlyClassification;

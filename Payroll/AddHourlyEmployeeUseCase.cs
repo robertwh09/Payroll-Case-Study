@@ -7,7 +7,8 @@ namespace Payroll
    public class AddHourlyEmployeeUseCase : AddEmployeeUseCase
    {
       private double hourlyRate;
-      public AddHourlyEmployeeUseCase(int empID, string name, string address, double hourlyRate) : base(empID, name, address)
+      public AddHourlyEmployeeUseCase(int empID, string name, string address, double hourlyRate, InMemoryPayrollDatabase database)
+         : base(empID, name, address, database)
       {
          this.hourlyRate = hourlyRate;
       }

@@ -4,7 +4,7 @@
    {
       private readonly int memberId;
       private readonly double dues;
-      public ChangeMemberUseCase(int empId, int memberId, double dues) : base(empId)
+      public ChangeMemberUseCase(int empId, int memberId, double dues, InMemoryPayrollDatabase database) : base(empId, database)
       {
          this.memberId = memberId;
          this.dues = dues;
@@ -15,7 +15,7 @@
       }
       protected override void RecordMembership(Employee e)
       {
-         PayrollDatabase.AddUnionMember(memberId, e);
+         database.AddUnionMember(memberId, e);
       }
    }
 }

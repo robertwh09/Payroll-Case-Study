@@ -9,15 +9,15 @@ namespace Payroll
       private readonly int memberId;
       private readonly DateTime time;
       private readonly double charge;
-      public ServiceChargeUseCase(int id, DateTime time, double charge)
+      public ServiceChargeUseCase(int id, DateTime time, double charge, InMemoryPayrollDatabase database) : base (database)
       {
          this.memberId = id;
          this.time = time;
          this.charge = charge;
       }
-      public void Execute()
+      public override void Execute()
       {
-         Employee e = PayrollDatabase.GetUnionMember(memberId);
+         Employee e = database.GetUnionMember(memberId);
          if (e != null)
          {
             UnionAffiliation ua = null;

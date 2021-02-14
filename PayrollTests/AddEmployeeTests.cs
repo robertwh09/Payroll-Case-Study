@@ -9,14 +9,15 @@ namespace Payroll.Tests
    [TestClass()]
    public class AddEmployeeTests
    {
+      private InMemoryPayrollDatabase database = new InMemoryPayrollDatabase();
       [TestMethod()]
       public void AddSalariedEmployeeTest()
       {
          int empId = 1;
          double salary = 1000.0;
-         AddSalariedEmployeeUseCase t = new AddSalariedEmployeeUseCase(empId, "Bob", "Home1", salary);
+         AddSalariedEmployeeUseCase t = new AddSalariedEmployeeUseCase(empId, "Bob", "Home1", salary, database);
          t.Execute();
-         Employee e = PayrollDatabase.GetEmployee(empId);
+         Employee e = database.GetEmployee(empId);
          Assert.AreEqual("Bob", e.Name);
          PaymentClassification pc = e.Classification;
          Assert.IsTrue(pc is SalariedClassification);
@@ -34,9 +35,9 @@ namespace Payroll.Tests
          double baseSalary = 950;
          double commissionRate = 13.5;
 
-         AddCommissionedEmployeeUseCase t = new AddCommissionedEmployeeUseCase(empId, "Fred", "Home2", baseSalary, commissionRate);
+         AddCommissionedEmployeeUseCase t = new AddCommissionedEmployeeUseCase(empId, "Fred", "Home2", baseSalary, commissionRate, database);
          t.Execute();
-         Employee e = PayrollDatabase.GetEmployee(empId);
+         Employee e = database.GetEmployee(empId);
          Assert.AreEqual("Fred", e.Name);
 
          PaymentClassification pc = e.Classification;
@@ -59,9 +60,9 @@ namespace Payroll.Tests
       {
          int empId = 3;
          double hourlyRate = 12.5;
-         AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Freda", "Home3", hourlyRate);
+         AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Freda", "Home3", hourlyRate, database);
          t.Execute();
-         Employee e = PayrollDatabase.GetEmployee(empId);
+         Employee e = database.GetEmployee(empId);
          Assert.AreEqual("Freda", e.Name);
 
          PaymentClassification pc = e.Classification;

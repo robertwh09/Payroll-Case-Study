@@ -9,13 +9,13 @@ namespace Payroll
    public abstract class ChangeEmployeeUseCase : UseCase
    {
       private readonly int empId;
-      public ChangeEmployeeUseCase(int empId)
+      public ChangeEmployeeUseCase(int empId, InMemoryPayrollDatabase database) : base (database)
       {
          this.empId = empId;
       }
-      public void Execute()
+      public override void Execute()
       {
-         Employee e = PayrollDatabase.GetEmployee(empId);
+         Employee e = database.GetEmployee(empId);
          if (e != null)
             Change(e);
          else

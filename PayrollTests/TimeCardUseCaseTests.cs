@@ -8,16 +8,17 @@ namespace Payroll.Tests
    [TestClass()]
    public class TimeCardUseCaseTests
    {
+      private InMemoryPayrollDatabase database = new InMemoryPayrollDatabase();
       [TestMethod()]
       public void TimeCardUseCaseTest()
       {
          int empId = 5;
          double hourlyRate = 15.25;
-         AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Bill", "Home", hourlyRate);
+         AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Bill", "Home", hourlyRate, database);
          t.Execute();
-         TimeCardUseCase tct = new TimeCardUseCase(new DateTime(2005, 7, 31), 8.0, empId);
+         TimeCardUseCase tct = new TimeCardUseCase(new DateTime(2005, 7, 31), 8.0, empId, database);
          tct.Execute();
-         Employee e = PayrollDatabase.GetEmployee(empId);
+         Employee e = database.GetEmployee(empId);
          Assert.IsNotNull(e);
          PaymentClassification pc = e.Classification;
          Assert.IsTrue(pc is HourlyClassification);

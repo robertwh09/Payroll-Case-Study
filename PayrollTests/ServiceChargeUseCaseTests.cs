@@ -9,14 +9,16 @@ namespace Payroll.Tests
    [TestClass()]
    public class ServiceChargeUseCaseTests
    {
+      private InMemoryPayrollDatabase database = new InMemoryPayrollDatabase();
+
       [TestMethod()]
       public void ServiceChargeUseCaseTest()
       {
          int empId = 2;
-         AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Bill", "Home", 15.25);
+         AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Bill", "Home", 15.25, database);
          t.Execute();
 
-         Employee e = PayrollDatabase.GetEmployee(empId);
+         Employee e = database.GetEmployee(empId);
          Assert.IsNotNull(e);
          UnionAffiliation af = new UnionAffiliation();
          e.Affiliation = af;
@@ -24,11 +26,11 @@ namespace Payroll.Tests
          double serviceCharge = 12.95;
          DateTime date = new DateTime(2005, 8, 8);
 
-         PayrollDatabase.AddUnionMember(memberId, e);
-         ServiceChargeUseCase sct = new ServiceChargeUseCase(memberId, date, serviceCharge);
+         database.AddUnionMember(memberId, e);
+         ServiceChargeUseCase sct = new ServiceChargeUseCase(memberId, date, serviceCharge, database);
          sct.Execute();
 
-         e = PayrollDatabase.GetEmployee(empId);
+         e = database.GetEmployee(empId);
          af = e.Affiliation as UnionAffiliation;
          ServiceCharge sc = af.GetServiceCharge(date);
          Assert.IsNotNull(sc);

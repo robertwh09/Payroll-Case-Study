@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll", "Payroll\Payroll.csproj", "{245820AD-187A-40E8-8A9F-8A5A2CCD868F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payroll", "Payroll\Payroll.csproj", "{245820AD-187A-40E8-8A9F-8A5A2CCD868F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayrollTests", "PayrollTests\PayrollTests.csproj", "{C81AF3A7-2454-4983-8522-337E9DD0E18F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayrollTests", "PayrollTests\PayrollTests.csproj", "{C81AF3A7-2454-4983-8522-337E9DD0E18F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -5,8 +5,14 @@ using System.Text;
 namespace Payroll
 
 {
-   public interface UseCase
+   public abstract class UseCase
    {
-      public void Execute();
+      protected readonly IPayrollDatabase database;
+
+      public UseCase(IPayrollDatabase database)
+      {
+         this.database = database;
+      }
+      public abstract void Execute();
    }
 }

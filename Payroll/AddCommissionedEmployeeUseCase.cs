@@ -8,7 +8,8 @@ namespace Payroll
    {
       private readonly double baseSalary;
       private readonly double commissionRate;
-      public AddCommissionedEmployeeUseCase(int empid, string name, string address, double baseSalary, double commissionRate) : base(empid, name, address)
+      public AddCommissionedEmployeeUseCase(int empid, string name, string address, double baseSalary, double commissionRate, InMemoryPayrollDatabase database) 
+         : base(empid, name, address, database)
       {
          this.baseSalary = baseSalary;
          this.commissionRate = commissionRate;

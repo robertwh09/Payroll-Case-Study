@@ -8,18 +8,18 @@ namespace Payroll
 		private readonly DateTime payDate;
 		private Hashtable paychecks = new Hashtable();
 
-		public PaydayUseCase(DateTime payDate)
+		public PaydayUseCase(DateTime payDate, InMemoryPayrollDatabase database) : base (database)
 		{
 			this.payDate = payDate;
 		}
 
-		public void Execute()
+		public override void Execute()
 		{
-			ArrayList empIds = PayrollDatabase.GetAllEmployeeIds();
+			ArrayList empIds = database.GetAllEmployeeIds();
 
 			foreach (int empId in empIds)
 			{
-				Employee employee = PayrollDatabase.GetEmployee(empId);
+				Employee employee = database.GetEmployee(empId);
 				if (employee.IsPayDate(payDate))
 				{
 					DateTime startDate =	employee.GetPayPeriodStartDate(payDate);

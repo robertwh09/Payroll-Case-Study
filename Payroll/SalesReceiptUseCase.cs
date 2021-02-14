@@ -10,16 +10,16 @@ namespace Payroll
 		private readonly double saleAmount;
 		private readonly int empId;
 
-		public SalesReceiptUseCase(DateTime time, double saleAmount, int empId)
+		public SalesReceiptUseCase(DateTime time, double saleAmount, int empId, InMemoryPayrollDatabase database) : base (database)
 		{
 			this.date = time;
 			this.saleAmount = saleAmount;
 			this.empId = empId;
 		}
 
-		public void Execute()
+		public override void Execute()
 		{
-			Employee e = PayrollDatabase.GetEmployee(empId);
+			Employee e = database.GetEmployee(empId);
 
 			if (e != null)
 			{
