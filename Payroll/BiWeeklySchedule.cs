@@ -15,5 +15,9 @@ namespace Payroll
       {
          throw new NotImplementedException();
       }
+      public override string ToString()
+      {
+         return "bi-weekly";
+      }
    }
 }

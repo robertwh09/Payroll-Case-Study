@@ -10,5 +10,10 @@ namespace Payroll
 		{
 			paycheck.SetField("Disposition", "Hold");
 		}
-   }
+
+		public override string ToString()
+		{
+			return "hold";
+		}
+	}
 }

@@ -6,6 +6,7 @@ namespace Payroll.Database
 {
    public class SqlPayrollDatabase : IPayrollDatabase
    {
+      private string methodCode;
       private readonly MySql.Data.MySqlClient.MySqlConnection conn;
       public SqlPayrollDatabase()
       {
@@ -15,6 +16,8 @@ namespace Payroll.Database
       }
       public void AddEmployee(Employee employee)
       {
+         PrepareToSavePaymentMethod(employee);
+
          string sql = "insert into employee values (" +
          "@EmpId, @Name, @Address, @ScheduleType, " +
          "@PaymentMethodType, @PaymentClassificationType)";
@@ -27,7 +30,7 @@ namespace Payroll.Database
          command.Parameters.AddWithValue("@Name", employee.Name);
          command.Parameters.AddWithValue("@Address", employee.Address);
          command.Parameters.AddWithValue("@ScheduleType", ScheduleCode(employee.Schedule));
-         command.Parameters.AddWithValue("@PaymentMethodType", employee.Method.GetType().ToString());
+         command.Parameters.AddWithValue("@PaymentMethodType", methodCode);
          command.Parameters.AddWithValue("@PaymentClassificationType", employee.Classification.GetType().ToString());
          command.ExecuteNonQuery();
       }
@@ -35,8 +38,32 @@ namespace Payroll.Database
       {
          if (schedule is MonthlySchedule)
             return "monthly";
+         if (schedule is WeeklySchedule)
+            return "weekly";
+         if (schedule is BiWeeklySchedule)
+            return "bi-weekly";
          else
             return "unknown";
+      }
+
+      private void PrepareToSavePaymentMethod(Employee employee)
+      {
+         PaymentMethod method = employee.Method;
+         if (method is HoldMethod)
+            methodCode = "hold";
+         else if (method is DirectDepositMethod)
+         {
+            methodCode = "direct";
+            //DirectDepositMethod ddMethod = method as DirectDepositMethod;
+            //string sql = "insert into DirectDepositAccount" + "values (@Bank, @Account, @EmpId)";
+            //insertPaymentMethodCommand =  new SqlCommand(sql, connection);
+            //insertPaymentMethodCommand.Parameters.Add("@Bank", ddMethod.Bank);
+            //insertPaymentMethodCommand.Parameters.Add("@Account", ddMethod.AccountNumber); insertPaymentMethodCommand.Parameters.Add("@EmpId", employee.EmpId);
+         }
+         else if (method is MailMethod)
+            methodCode = "mail";
+         else
+            methodCode = "unknown";
       }
 
       public void AddUnionMember(int id, Employee e)

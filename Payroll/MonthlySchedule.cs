@@ -25,6 +25,9 @@ namespace Payroll
 
          return date.AddDays(days);
       }
-
+      public override string ToString()
+      {
+         return "monthly";
+      }
    }
 }

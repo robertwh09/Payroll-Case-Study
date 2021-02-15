@@ -15,5 +15,10 @@ namespace Payroll
       {
          return payDate.DayOfWeek == DayOfWeek.Friday;
       }
+
+      public override string ToString()
+      {
+         return "weekly";
+      }
    }
 }
