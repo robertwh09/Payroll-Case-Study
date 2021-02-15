@@ -8,6 +8,8 @@ namespace Payroll.Database
    {
       private string methodCode;
       private readonly MySql.Data.MySqlClient.MySqlConnection conn;
+      private MySqlCommand insertPaymentMethodCommand;
+      private MySqlCommand insertEmployeeCommand;
       public SqlPayrollDatabase()
       {
          string connString = "server=localhost;user id=sa;database=payroll;pwd=abc";
@@ -17,23 +19,44 @@ namespace Payroll.Database
       public void AddEmployee(Employee employee)
       {
          PrepareToSavePaymentMethod(employee);
+         PrepareToSaveEmployee(employee);
 
-         string sql = "insert into employee values (" +
-         "@EmpId, @Name, @Address, @ScheduleType, " +
-         "@PaymentMethodType, @PaymentClassificationType)";
-
-         MySqlCommand command = new MySqlCommand();
-         command.Connection = conn;
-         command.CommandText = sql;
-
-         command.Parameters.AddWithValue("@EmpId", employee.EmpId);
-         command.Parameters.AddWithValue("@Name", employee.Name);
-         command.Parameters.AddWithValue("@Address", employee.Address);
-         command.Parameters.AddWithValue("@ScheduleType", ScheduleCode(employee.Schedule));
-         command.Parameters.AddWithValue("@PaymentMethodType", methodCode);
-         command.Parameters.AddWithValue("@PaymentClassificationType", employee.Classification.GetType().ToString());
-         command.ExecuteNonQuery();
+         MySqlTransaction transaction = conn.BeginTransaction();
+         try
+         {
+            ExecuteCommand(insertEmployeeCommand, transaction);
+            ExecuteCommand(insertPaymentMethodCommand, transaction);
+            transaction.Commit();
+         }
+         catch (MySqlException e)
+         {
+            transaction.Rollback();
+            throw e;
+         }
       }
+
+      private void ExecuteCommand(MySqlCommand command, MySqlTransaction transaction)
+      {
+         if (command != null)
+         {
+            command.Connection = conn;
+            command.Transaction = transaction;
+            command.ExecuteNonQuery();
+         }
+      }
+
+      private void PrepareToSaveEmployee(Employee employee)
+      {
+         string sql = "insert into Employee values (@EmpId, @Name, @Address, @ScheduleType, @PaymentMethodType, @PaymentClassificationType)";
+         insertEmployeeCommand = new MySqlCommand(sql);
+         insertEmployeeCommand.Parameters.AddWithValue("@EmpId", employee.EmpId);
+         insertEmployeeCommand.Parameters.AddWithValue("@Name", employee.Name);
+         insertEmployeeCommand.Parameters.AddWithValue("@Address", employee.Address);
+         insertEmployeeCommand.Parameters.AddWithValue("@ScheduleType", ScheduleCode(employee.Schedule));
+         insertEmployeeCommand.Parameters.AddWithValue("@PaymentMethodType", methodCode);
+         insertEmployeeCommand.Parameters.AddWithValue("@PaymentClassificationType", employee.Classification.GetType().ToString());
+      }
+
       private static string ScheduleCode(PaymentSchedule schedule)
       {
          if (schedule is MonthlySchedule)
@@ -41,7 +64,7 @@ namespace Payroll.Database
          if (schedule is WeeklySchedule)
             return "weekly";
          if (schedule is BiWeeklySchedule)
-            return "bi-weekly";
+            return "biweekly";
          else
             return "unknown";
       }
@@ -54,16 +77,37 @@ namespace Payroll.Database
          else if (method is DirectDepositMethod)
          {
             methodCode = "direct";
-            //DirectDepositMethod ddMethod = method as DirectDepositMethod;
-            //string sql = "insert into DirectDepositAccount" + "values (@Bank, @Account, @EmpId)";
-            //insertPaymentMethodCommand =  new SqlCommand(sql, connection);
-            //insertPaymentMethodCommand.Parameters.Add("@Bank", ddMethod.Bank);
-            //insertPaymentMethodCommand.Parameters.Add("@Account", ddMethod.AccountNumber); insertPaymentMethodCommand.Parameters.Add("@EmpId", employee.EmpId);
+            DirectDepositMethod ddMethod = method as DirectDepositMethod;
+            insertPaymentMethodCommand = CreateInsertDirectDepositCommand(ddMethod, employee);
          }
          else if (method is MailMethod)
+         {
             methodCode = "mail";
+            MailMethod mailMethod = method as MailMethod;
+            insertPaymentMethodCommand = CreateInsertMailMethodCommand(mailMethod, employee);
+         }
          else
             methodCode = "unknown";
+      }
+
+      private MySqlCommand CreateInsertDirectDepositCommand(DirectDepositMethod ddMethod, Employee employee)
+      {
+         string sql = "insert into directdepositaccount values (@Bank, @Account, @EmpId)";
+         MySqlCommand command = new MySqlCommand(sql, conn);
+         command.Parameters.AddWithValue("@Bank", ddMethod.Bank);
+         command.Parameters.AddWithValue("@Account", ddMethod.AccountNumber);
+         command.Parameters.AddWithValue("@EmpId", employee.EmpId);
+         return command;
+      }
+
+      private MySqlCommand CreateInsertMailMethodCommand(MailMethod mailMethod, Employee employee)
+      {
+         string sql = "insert into PaycheckAddress " +
+         "values (@Address, @EmpId)";
+         MySqlCommand command = new MySqlCommand(sql);
+         command.Parameters.AddWithValue("@Address", mailMethod.Address);
+         command.Parameters.AddWithValue("@EmpId", employee.EmpId);
+         return command;
       }
 
       public void AddUnionMember(int id, Employee e)
