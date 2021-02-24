@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 
@@ -7,9 +8,13 @@ namespace Payroll.Database
    public class SqlPayrollDatabase : IPayrollDatabase
    {
       private string methodCode;
+      private string classificationCode;
       private readonly MySql.Data.MySqlClient.MySqlConnection conn;
       private MySqlCommand insertPaymentMethodCommand;
+      private MySqlCommand insertClassificationCommand;
       private MySqlCommand insertEmployeeCommand;
+      
+
       public SqlPayrollDatabase()
       {
          string connString = "server=localhost;user id=sa;database=payroll;pwd=abc";
@@ -19,6 +24,7 @@ namespace Payroll.Database
       public void AddEmployee(Employee employee)
       {
          PrepareToSavePaymentMethod(employee);
+         PrepareToSaveClassification(employee);
          PrepareToSaveEmployee(employee);
 
          MySqlTransaction transaction = conn.BeginTransaction();
@@ -26,6 +32,7 @@ namespace Payroll.Database
          {
             ExecuteCommand(insertEmployeeCommand, transaction);
             ExecuteCommand(insertPaymentMethodCommand, transaction);
+            ExecuteCommand(insertClassificationCommand, transaction);
             transaction.Commit();
          }
          catch (MySqlException e)
@@ -33,6 +40,59 @@ namespace Payroll.Database
             transaction.Rollback();
             throw e;
          }
+      }
+
+      private void PrepareToSaveClassification(Employee employee)
+      {
+         PaymentClassification classification = employee.Classification;
+         if (classification is HourlyClassification)
+         {
+            classificationCode = "hourly";
+            HourlyClassification hourlyClassification = classification as HourlyClassification;
+            insertClassificationCommand = CreateInsertHourlyClassificationCommand(hourlyClassification, employee);
+         }
+         else if (classification is SalariedClassification)
+         {
+            classificationCode = "salary";
+            SalariedClassification salariedClassification = classification as SalariedClassification;
+            insertClassificationCommand = CreateInsertSalariedClassificationCommand(salariedClassification, employee);
+         }
+         else if (classification is CommissionedClassification)
+         {
+            classificationCode = "commission";
+            CommissionedClassification commissionClassification = classification as CommissionedClassification;
+            insertClassificationCommand = CreateInsertCommissionClassificationCommand(commissionClassification, employee);
+         }
+         else
+            classificationCode = "unknown";
+      }
+
+      private MySqlCommand CreateInsertSalariedClassificationCommand(SalariedClassification classification, Employee employee)
+      {
+         string sql = "insert into SalariedClassification values (@Salary, @EmpId)";
+         MySqlCommand command = new MySqlCommand(sql);
+         command.Parameters.AddWithValue("@Salary", classification.Salary);
+         command.Parameters.AddWithValue("@EmpId", employee.EmpId);
+         return command;
+      }
+
+      private MySqlCommand CreateInsertHourlyClassificationCommand(HourlyClassification classification, Employee employee)
+      {
+         string sql = "insert into HourlyClassification values (@HourlyRate, @EmpId)";
+         MySqlCommand command = new MySqlCommand(sql);
+         command.Parameters.AddWithValue("@HourlyRate", classification.HourlyRate);
+         command.Parameters.AddWithValue("@EmpId", employee.EmpId);
+         return command;
+      }
+
+      private MySqlCommand CreateInsertCommissionClassificationCommand(CommissionedClassification classification, Employee employee)
+      {
+         string sql = "insert into CommissionedClassification values (@Salary, @Commission, @EmpId)";
+         MySqlCommand command = new MySqlCommand(sql);
+         command.Parameters.AddWithValue("@Salary", classification.BaseSalary);
+         command.Parameters.AddWithValue("@Commission", classification.CommissionRate);
+         command.Parameters.AddWithValue("@EmpId", employee.EmpId);
+         return command;
       }
 
       private void ExecuteCommand(MySqlCommand command, MySqlTransaction transaction)
@@ -54,7 +114,7 @@ namespace Payroll.Database
          insertEmployeeCommand.Parameters.AddWithValue("@Address", employee.Address);
          insertEmployeeCommand.Parameters.AddWithValue("@ScheduleType", ScheduleCode(employee.Schedule));
          insertEmployeeCommand.Parameters.AddWithValue("@PaymentMethodType", methodCode);
-         insertEmployeeCommand.Parameters.AddWithValue("@PaymentClassificationType", employee.Classification.GetType().ToString());
+         insertEmployeeCommand.Parameters.AddWithValue("@PaymentClassificationType", classificationCode);
       }
 
       private static string ScheduleCode(PaymentSchedule schedule)

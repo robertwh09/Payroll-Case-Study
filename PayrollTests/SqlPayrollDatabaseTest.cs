@@ -3,6 +3,7 @@ using Payroll.Database;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System;
 
 namespace Payroll.Tests
 {
@@ -126,6 +127,57 @@ namespace Payroll.Tests
          { }
          DataTable table = LoadTable("Employee");
          Assert.AreEqual(0, table.Rows.Count);
+      }
+
+      [TestMethod]
+      public void HoulyClassificationGetsSaved()
+      {
+         CheckSavedClassificationCode(new HourlyClassification(7.50), "hourly");
+
+         DataTable table = LoadTable("HourlyClassification");
+
+         Assert.AreEqual(1, table.Rows.Count);
+         DataRow row = table.Rows[0];
+         Assert.AreEqual(7.50, Convert.ToDouble(row["HourlyRate"]), 0.01);
+         Assert.AreEqual(123, row["EmpId"]);
+      }
+
+      private void CheckSavedClassificationCode(PaymentClassification classification, string expectedCode)
+      {
+         employee.Classification = classification;
+         database.AddEmployee(employee);
+
+         DataTable table = LoadTable("Employee");
+         DataRow row = table.Rows[0];
+
+         Assert.AreEqual(expectedCode, row["PaymentClassificationType"]);
+      }
+
+      [TestMethod]
+      public void SalariedClassificationGetsSaved()
+      {
+         CheckSavedClassificationCode(new SalariedClassification(1234.56), "salary");
+
+         DataTable table = LoadTable("SalariedClassification");
+
+         Assert.AreEqual(1, table.Rows.Count);
+         DataRow row = table.Rows[0];
+         Assert.AreEqual(1234.56, Convert.ToDouble(row["Salary"]), 0.01);
+         Assert.AreEqual(123, row["EmpId"]);
+      }
+
+      [TestMethod]
+      public void CommissionClassificationGetsSaved()
+      {
+         CheckSavedClassificationCode(new CommissionedClassification(900.01, 15.5), "commission");
+
+         DataTable table = LoadTable("CommissionedClassification");
+
+         Assert.AreEqual(1, table.Rows.Count);
+         DataRow row = table.Rows[0];
+         Assert.AreEqual(900.01, Convert.ToDouble(row["Salary"]), 0.01);
+         Assert.AreEqual(15.5, Convert.ToDouble(row["Commission"]), 0.01);
+         Assert.AreEqual(123, row["EmpId"]);
       }
 
       private void ClearTables()

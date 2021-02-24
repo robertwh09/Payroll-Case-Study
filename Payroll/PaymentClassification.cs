@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Payroll
 {
-   public interface PaymentClassification
+   public abstract class PaymentClassification
    {
-      public double CalculatePay(Paycheck paycheck);
+      public abstract double CalculatePay(Paycheck paycheck);
    }
 }

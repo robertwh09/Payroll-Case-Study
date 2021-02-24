@@ -14,9 +14,13 @@ namespace Payroll
 
       public double Salary { get => salary; set => salary = value; }
 
-      double PaymentClassification.CalculatePay(Paycheck paycheck)
+      public override double CalculatePay(Paycheck paycheck)
       {
          return salary;
+      }
+      public override string ToString()
+      {
+         return String.Format("${0}", salary);
       }
    }
 }

@@ -16,7 +16,7 @@ namespace Payroll
 
       public double HourlyRate { get => hourlyRate; }
 
-      public double CalculatePay(Paycheck paycheck)
+      public override double CalculatePay(Paycheck paycheck)
       {
          double totalPay = 0.0;
          foreach (TimeCard timeCard in timeCards.Values)
@@ -44,6 +44,10 @@ namespace Payroll
       public TimeCard GetTimeCard(DateTime dateTime)
       {
          return timeCards[dateTime.Date] as TimeCard;
+      }
+      public override string ToString()
+      {
+         return String.Format("${0}/hr", hourlyRate);
       }
    }
 }

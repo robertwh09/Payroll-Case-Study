@@ -30,9 +30,21 @@ namespace Payroll
          return salesReceipts[time] as SalesReceipt;
       }
 
-      double PaymentClassification.CalculatePay(Paycheck paycheck)
+      public override double CalculatePay(Paycheck paycheck)
       {
-         throw new NotImplementedException();
+         double salesTotal = 0;
+         foreach (SalesReceipt receipt in salesReceipts.Values)
+         {
+            if (DateUtil.IsInPayPeriod(receipt.Date,
+               paycheck.PayPeriodStartDate,
+               paycheck.PayPeriodEndDate))
+               salesTotal += receipt.SaleAmount;
+         }
+         return baseSalary + (salesTotal * commissionRate * 0.01); ;
+      }
+      public override string ToString()
+      {
+         return String.Format("${0} + {1}% sales commission", baseSalary, commissionRate);
       }
    }
 }
