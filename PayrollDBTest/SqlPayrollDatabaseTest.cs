@@ -1,11 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Payroll.Database;
-using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System;
+using Payroll;
 
-namespace Payroll.Tests
+namespace PayrollDB.Tests
 {
    [TestClass]
    public class SqlPayrollDatabaseTest
@@ -17,11 +16,13 @@ namespace Payroll.Tests
       [TestInitialize]
       public void SetUp()
       {
-         this.database = new SqlPayrollDatabase();
+         this.database = new MySqlPayrollDatabase();
          string connString = "Database=Payroll;Data Source=localhost;user id=sa;password=abc";
          conn = new MySql.Data.MySqlClient.MySqlConnection(connString); 
          conn.Open();
+
          ClearTables();
+
          employee = new Employee(123, "George", "123 Baker St.");
          employee.Schedule = new MonthlySchedule();
          employee.Method = new DirectDepositMethod("Bank 1", "123890");
@@ -44,7 +45,7 @@ namespace Payroll.Tests
       }
 
       [TestMethod]
-      public void AddEmployeeTest()
+      private void AddEmployeeTest()
       {
          database.AddEmployee(employee);
 
@@ -130,7 +131,7 @@ namespace Payroll.Tests
       }
 
       [TestMethod]
-      public void HoulyClassificationGetsSaved()
+      public void HourlyClassificationGetsSaved()
       {
          CheckSavedClassificationCode(new HourlyClassification(7.50), "hourly");
 
@@ -180,6 +181,30 @@ namespace Payroll.Tests
          Assert.AreEqual(123, row["EmpId"]);
       }
 
+      [TestMethod]
+      public void LoadEmployee()
+      {
+         employee.Schedule = new BiWeeklySchedule();
+         employee.Method = new DirectDepositMethod("1st Bank", "0123456");
+         employee.Classification = new SalariedClassification(5432.10);
+         database.AddEmployee(employee);
+         Employee loadedEmployee = database.GetEmployee(123);
+         Assert.AreEqual(123, loadedEmployee.EmpId);
+         Assert.AreEqual(employee.Name, loadedEmployee.Name);
+         Assert.AreEqual(employee.Address, loadedEmployee.Address);
+         PaymentSchedule schedule = loadedEmployee.Schedule;
+         Assert.IsTrue(schedule is BiWeeklySchedule);
+         PaymentMethod method = loadedEmployee.Method;
+         Assert.IsTrue(method is DirectDepositMethod);
+         DirectDepositMethod ddMethod = method as DirectDepositMethod;
+         Assert.AreEqual("1st Bank", ddMethod.Bank);
+         Assert.AreEqual("0123456", ddMethod.AccountNumber);
+         PaymentClassification classification = loadedEmployee.Classification;
+         Assert.IsTrue(classification is SalariedClassification);
+         SalariedClassification salariedClassification = classification as SalariedClassification;
+         Assert.AreEqual(5432.10, salariedClassification.Salary);
+      }
+      
       private void ClearTables()
       {
          ClearTable("SalariedClassification");
