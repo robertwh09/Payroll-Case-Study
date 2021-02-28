@@ -6,10 +6,10 @@ namespace Payroll
 {
    //Template Pattern used here.  All changes require the Employee to be retrieved
    //But the specific change needed is 'Change' by the subclass specific to the type of change
-   public abstract class ChangeEmployeeUseCase : UseCase
+   public abstract class ChangeEmployeeTemplate : UseCase
    {
       private readonly int empId;
-      public ChangeEmployeeUseCase(int empId, IPayrollDatabase database) : base (database)
+      public ChangeEmployeeTemplate(int empId, IPayrollDatabase database) : base (database)
       {
          this.empId = empId;
       }

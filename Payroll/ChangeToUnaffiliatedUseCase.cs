@@ -1,8 +1,8 @@
 ﻿namespace Payroll
 {
-   public class ChangeUnaffiliatedUseCase : ChangeAffiliationUseCase
+   public class ChangeToUnaffiliatedUseCase : ChangeAffiliationTemplate
    {
-      public ChangeUnaffiliatedUseCase(int empId, IPayrollDatabase database) : base(empId, database) { }
+      public ChangeToUnaffiliatedUseCase(int empId, IPayrollDatabase database) : base(empId, database) { }
       protected override Affiliation Affiliation => new NoAffiliation();
 
       protected override void RecordMembership(Employee e)
@@ -10,10 +10,9 @@
          Affiliation affiliation = e.Affiliation;
          if (affiliation is UnionAffiliation)
          {
-            UnionAffiliation unionAffiliation =
-            affiliation as UnionAffiliation;
+            UnionAffiliation unionAffiliation = affiliation as UnionAffiliation;
             int memberId = unionAffiliation.MemberId;
-            database.RemoveUnionMember(memberId);
+            database.RemoveAffiliateMember(memberId);
          }
       }
    }

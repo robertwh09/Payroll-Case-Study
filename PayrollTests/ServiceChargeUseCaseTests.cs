@@ -26,7 +26,7 @@ namespace Payroll.Tests
          double serviceCharge = 12.95;
          DateTime date = new DateTime(2005, 8, 8);
 
-         database.AddUnionMember(memberId, e);
+         database.AddAffiliateMember(memberId, e);
          ServiceChargeUseCase sct = new ServiceChargeUseCase(memberId, date, serviceCharge, database);
          sct.Execute();
 

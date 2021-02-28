@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Data;
 using MySql.Data.MySqlClient;
 using Payroll;
 
@@ -27,9 +28,10 @@ namespace PayrollMySQLDB
          operation.Execute();
       }
 
-      public void AddUnionMember(int id, Employee e)
+      public void AddAffiliateMember(int memberId, Employee employee)
       {
-         throw new System.NotImplementedException();
+         SaveAffiliationOperation operation = new SaveAffiliationOperation(memberId, employee, conn);
+         operation.Execute();
       }
 
       public void DeleteEmployee(int id)
@@ -54,14 +56,26 @@ namespace PayrollMySQLDB
          return loadOperation.Employee;
       }
 
-      public Employee GetUnionMember(int id)
+      public Employee GetAffiliateMember(int affId)
       {
-         throw new System.NotImplementedException();
+         try
+         {
+            GetEmpIDFromAffiliateIDOperation loadOperation = new GetEmpIDFromAffiliateIDOperation(affId, conn);
+            loadOperation.Execute();
+            int empId = loadOperation.EmpId;
+            Employee employee = GetEmployee(empId);
+            return employee;
+         }
+         catch (Exception)
+         {
+            return null;
+         }
       }
 
-      public void RemoveUnionMember(int memberId)
+      public void RemoveAffiliateMember(int memberId)
       {
-         throw new System.NotImplementedException();
+         RemoveAffiliateMemberOperation removeOperation = new RemoveAffiliateMemberOperation(memberId, conn);
+         removeOperation.Execute();
       }
 
       public void AddTimecard(int empId, Timecard timecard)
@@ -72,7 +86,7 @@ namespace PayrollMySQLDB
       {
          throw new System.NotImplementedException();
       }
-      public IList GetTimecardByDateRange(int empId, DateTime startDate, DateTime endDate)
+      public IList GetTimecard(int empId, DateTime startDate, DateTime endDate)
       {
          throw new System.NotImplementedException();
       }

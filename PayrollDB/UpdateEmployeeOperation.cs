@@ -6,7 +6,7 @@ using Payroll;
 
 namespace PayrollMySQLDB
 {
-   class UpdateEmployeeOperation
+   public class UpdateEmployeeOperation
    {
       private readonly Employee employee;
       private readonly MySqlConnection conn;
@@ -35,7 +35,7 @@ namespace PayrollMySQLDB
 
       private void PrepareToUpdateEmployee(Employee employee)
       {
-         string sql = "UPDATE Employee SET EmpID = @EmpId, Name = @Name, Address = @Address WHERE EmpID = @EmpId";
+         string sql = "update Employee set EmpID = @EmpId, Name = @Name, Address = @Address where EmpID = @EmpId";
          updateEmployeeCommand = new MySqlCommand(sql);
          updateEmployeeCommand.Parameters.AddWithValue("@EmpId", employee.EmpId);
          updateEmployeeCommand.Parameters.AddWithValue("@Name", employee.Name);

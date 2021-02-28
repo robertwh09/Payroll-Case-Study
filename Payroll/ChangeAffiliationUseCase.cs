@@ -1,15 +1,21 @@
 ﻿namespace Payroll
 {
-   public abstract class ChangeAffiliationUseCase : ChangeEmployeeUseCase
+   public class ChangeAffiliationUseCase : ChangeAffiliationTemplate
    {
-      public ChangeAffiliationUseCase(int empId, IPayrollDatabase database) : base(empId, database) { }
-      protected override void Change(Employee e)
+      private readonly int memberId;
+      private readonly double dues;
+      public ChangeAffiliationUseCase(int empId, int memberId, double dues, IPayrollDatabase database) : base(empId, database)
       {
-         RecordMembership(e);
-         Affiliation affiliation = Affiliation;
-         e.Affiliation = affiliation;
+         this.memberId = memberId;
+         this.dues = dues;
       }
-      protected abstract Affiliation Affiliation { get; }
-      protected abstract void RecordMembership(Employee e);
+      protected override Affiliation Affiliation
+      {
+         get { return new UnionAffiliation(memberId, dues); }
+      }
+      protected override void RecordMembership(Employee e)
+      {
+         database.AddAffiliateMember(memberId, e);
+      }
    }
 }

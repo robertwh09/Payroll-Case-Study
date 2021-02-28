@@ -33,7 +33,6 @@ namespace PayrollMySQLDB.Tests
 		public void LoadEmployeeData()
 		{
 			DataRow row = ShuntRow("Name,Address", "Jean", "10 Rue de Roi");
-
 			operation.CreateEmployee(row);
 
 			Assert.IsNotNull(operation.Employee);
@@ -65,6 +64,7 @@ namespace PayrollMySQLDB.Tests
 			Assert.IsTrue(employee.Method is HoldMethod);
 		}
 
+		//ShuntRow builds a row in an inmemory table without the need for a database
 		public static DataRow ShuntRow(string columns, params object[] values)
 		{
 			DataTable table = new DataTable();

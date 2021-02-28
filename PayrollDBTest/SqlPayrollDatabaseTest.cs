@@ -51,7 +51,7 @@ namespace PayrollMySQLDB.Tests
       {
          database.CreateEmployee(employee);
 
-         MySqlDataAdapter adpt = new MySqlDataAdapter("select * from Employee", conn);
+         MySqlDataAdapter adpt = new MySqlDataAdapter("SELECT * FROM Employee", conn);
          DataSet dataset = new DataSet();
          adpt.Fill(dataset);
          DataTable table = dataset.Tables["table"];
@@ -70,8 +70,8 @@ namespace PayrollMySQLDB.Tests
          Employee e = database.GetEmployee(123);
          e.Name = "Fred";
          e.Address = "256 Park Ln.";
-         ChangePrimaryFieldsUseCase ec = new ChangePrimaryFieldsUseCase(e, 123, database);
-         ec.Execute();
+         UpdateEmployeeOperation eo = new UpdateEmployeeOperation(e, conn);
+         eo.Execute();
 
          e = database.GetEmployee(123);
          Assert.AreEqual("Fred", e.Name);
@@ -89,7 +89,7 @@ namespace PayrollMySQLDB.Tests
          {
             database.CreateEmployee(employee);
             database.CreateEmployee(employee);
-            Assert.Fail("An duplicate PK exception needs to occur for this test to work.");
+            Assert.Fail("A duplicate PK exception needs to occur for this test to work.");
          }
          catch (MySqlException e)
          {
@@ -271,6 +271,25 @@ namespace PayrollMySQLDB.Tests
          Assert.AreEqual(5432.10, salariedClassification.Salary);
       }
 
+      [TestMethod]
+      public void AddRemoveUnionMemberOperationTest()
+      {
+         int empId = 123;
+         int affliationId = 4321;
+         ClearTables();
+
+         //Add Affiliation
+         database.CreateEmployee(employee);
+         database.AddAffiliateMember(affliationId, employee);
+         employee = database.GetAffiliateMember(affliationId);
+         Assert.AreEqual(empId, employee.EmpId);
+
+         //Remove Affiliation
+         database.RemoveAffiliateMember(affliationId);
+         employee = database.GetAffiliateMember(affliationId);
+         Assert.IsNull(employee);
+      }
+
       private void ClearTables()
       {
          ClearTable("SalariedClassification");
@@ -282,7 +301,7 @@ namespace PayrollMySQLDB.Tests
       }
       private void ClearTable(string tableName)
       {
-         new MySqlCommand("delete from " + tableName, this.conn).ExecuteNonQuery();
+         new MySqlCommand("DELETE FROM " + tableName, this.conn).ExecuteNonQuery();
       }
    }
 }

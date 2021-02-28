@@ -17,7 +17,7 @@ namespace Payroll
       }
       public override void Execute()
       {
-         Employee e = database.GetUnionMember(memberId);
+         Employee e = database.GetAffiliateMember(memberId);
          if (e != null)
          {
             UnionAffiliation ua = null;

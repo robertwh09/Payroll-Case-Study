@@ -139,8 +139,8 @@ namespace Payroll.Tests
          empId, "Bob", "Home", 1000.00, database);
          t.Execute();
          int memberId = 7734;
-         ChangeMemberUseCase cmt =
-         new ChangeMemberUseCase(empId, memberId, 9.42, database);
+         ChangeAffiliationUseCase cmt =
+         new ChangeAffiliationUseCase(empId, memberId, 9.42, database);
          cmt.Execute();
          DateTime payDate = new DateTime(2001, 11, 30);
          PaydayUseCase pt = new PaydayUseCase(payDate, database);
@@ -161,7 +161,7 @@ namespace Payroll.Tests
          empId, "Bill", "Home", 15.24, database);
          t.Execute();
          int memberId = 7734;
-         ChangeMemberUseCase cmt = new ChangeMemberUseCase(empId, memberId, 9.42, database);
+         ChangeAffiliationUseCase cmt = new ChangeAffiliationUseCase(empId, memberId, 9.42, database);
          cmt.Execute();
          DateTime payDate = new DateTime(2001, 11, 9);
          ServiceChargeUseCase sct = new ServiceChargeUseCase(memberId, payDate, 19.42, database);
@@ -186,7 +186,7 @@ namespace Payroll.Tests
          empId, "Bill", "Home", 15.24, database);
          t.Execute();
          int memberId = 7734;
-         ChangeMemberUseCase cmt = new ChangeMemberUseCase(empId, memberId, 9.42, database);
+         ChangeAffiliationUseCase cmt = new ChangeAffiliationUseCase(empId, memberId, 9.42, database);
          cmt.Execute();
          DateTime payDate = new DateTime(2001, 11, 9);
          DateTime earlyDate = new DateTime(2001, 11, 2); // previous Friday

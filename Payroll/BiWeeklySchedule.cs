@@ -6,14 +6,14 @@ namespace Payroll
 {
    public class BiWeeklySchedule : PaymentSchedule
    {
-      DateTime PaymentSchedule.GetPayPeriodStartDate(DateTime date)
+      public DateTime GetPayPeriodStartDate(DateTime date)
       {
-         throw new NotImplementedException();
+         return date.AddDays(-13);
       }
 
-      bool PaymentSchedule.IsPayDate(DateTime date)
+      public bool IsPayDate(DateTime payDate)
       {
-         throw new NotImplementedException();
+         return payDate.DayOfWeek == DayOfWeek.Friday && payDate.Day % 2 == 0;
       }
       public override string ToString()
       {

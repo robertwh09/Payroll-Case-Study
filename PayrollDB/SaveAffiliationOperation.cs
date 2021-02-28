@@ -1,27 +1,30 @@
 ﻿using MySql.Data.MySqlClient;
 using Payroll;
 
+
 namespace PayrollMySQLDB
 {
-   public class SaveTimecardOperation
+   class SaveAffiliationOperation
    {
-      private readonly Timecard timeCard;
+      private readonly int affiliationId;
       private readonly Employee employee;
       private readonly MySqlConnection conn;
-      private MySqlCommand insertTimecardCommand;
-      public SaveTimecardOperation(Timecard timeCard, Employee employee, MySqlConnection conn)
+      private MySqlCommand insertAffiliationCommand;
+
+      public SaveAffiliationOperation(int affiliationId, Employee employee, MySqlConnection conn)
       {
-         this.timeCard = timeCard;
+         this.affiliationId = affiliationId;
          this.employee = employee;
          this.conn = conn;
       }
+
       public void Execute()
       {
-         insertTimecardCommand = CreateInsertTimecardCommand(timeCard, employee);
+         insertAffiliationCommand = CreateInsertAffiliationCommand(affiliationId, employee);
          MySqlTransaction transaction = conn.BeginTransaction();
          try
          {
-            ExecuteCommand(insertTimecardCommand, transaction);
+            ExecuteCommand(insertAffiliationCommand, transaction);
             transaction.Commit();
          }
          catch (MySqlException e)
@@ -31,12 +34,11 @@ namespace PayrollMySQLDB
          }
       }
 
-      private MySqlCommand CreateInsertTimecardCommand(Timecard timecard, Employee employee)
+      private MySqlCommand CreateInsertAffiliationCommand(int affiliationId, Employee employee)
       {
-         string sql = "insert into Timecard values (@[date], @Hours, @EmpId)";
+         string sql = "insert into EmployeeAffiliation values (@EmpId, @Affiliation)";
          MySqlCommand command = new MySqlCommand(sql);
-         command.Parameters.AddWithValue("@[date]", timeCard.Date);
-         command.Parameters.AddWithValue("@Hours", timeCard.Hours);
+         command.Parameters.AddWithValue("@Affiliation", affiliationId);
          command.Parameters.AddWithValue("@EmpId", employee.EmpId);
          return command;
       }

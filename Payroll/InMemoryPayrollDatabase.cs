@@ -8,8 +8,10 @@ namespace Payroll
    {     
       private static Hashtable employees = new Hashtable();
       private static Hashtable unionMembers = new Hashtable();
-      private static Hashtable timecards = new Hashtable();
       private static IDictionary timecardDict = new Dictionary<Tuple<int, DateTime>, Timecard>();
+      private static Hashtable affiliationDues = new Hashtable();
+      private static Hashtable serviceCharges = new Hashtable();
+
       public void CreateEmployee(Employee employee)
       {
          employees[employee.EmpId] = employee;
@@ -25,17 +27,17 @@ namespace Payroll
          employees.Remove(id);
       }
 
-      public void AddUnionMember(int id, Employee e)
+      public void AddAffiliateMember(int id, Employee e)
       {
          unionMembers[id] = e;
       }
 
-      public Employee GetUnionMember(int id)
+      public Employee GetAffiliateMember(int id)
       {
          return unionMembers[id] as Employee;
       }
 
-      public void RemoveUnionMember(int memberId)
+      public void RemoveAffiliateMember(int memberId)
       {
          unionMembers.Remove(memberId);
       }
@@ -69,9 +71,8 @@ namespace Payroll
       }
 
 
-      public IList GetTimecardByDateRange(int empId, DateTime startDate, DateTime endDate)
+      public IList GetTimecard(int empId, DateTime startDate, DateTime endDate)
       {
-
          ArrayList arrayList = new ArrayList();
          foreach (DictionaryEntry e in timecardDict)
          {
@@ -86,15 +87,15 @@ namespace Payroll
          timecardDict.Remove(key);
       }
 
-      void ChangeEmployee(Employee employee)
-      {
-         throw new NotImplementedException();
-      }
-
       public void UpdateEmployee(Employee employee)
       {
-         employees.Remove(employee.EmpId);
-         employees.Add(employee.EmpId, employee);
+         employees[employee.EmpId] = employee;
+      }
+      public void Clear()
+      {
+         employees.Clear();
+         unionMembers.Clear();
+         timecardDict.Clear();
       }
    }
 }
