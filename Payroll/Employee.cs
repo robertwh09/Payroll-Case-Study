@@ -8,7 +8,7 @@ namespace Payroll
    {
       private readonly int empid;
       private string name;
-      private readonly string address;
+      private string address;
       private PaymentClassification classification;
       private PaymentSchedule schedule;
       private PaymentMethod method;
@@ -32,6 +32,7 @@ namespace Payroll
       public string Address
       {
          get { return address; }
+         set { address = value; }
       }
       public PaymentClassification Classification
       {

@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections;
-using MySql.Data;
 using MySql.Data.MySqlClient;
 using Payroll;
 
-namespace PayrollDB
+namespace PayrollMySQLDB
 {
    public class MySqlPayrollDatabase : IPayrollDatabase
    {
-      private string methodCode;
-      private string classificationCode;
       private readonly MySql.Data.MySqlClient.MySqlConnection conn;
-      private MySqlCommand insertPaymentMethodCommand;
-      private MySqlCommand insertClassificationCommand;
-      private MySqlCommand insertEmployeeCommand;
       
       public MySqlPayrollDatabase()
       {
@@ -27,9 +21,9 @@ namespace PayrollDB
          conn.Close();
       }
 
-      public void AddEmployee(Employee employee)
+      public void CreateEmployee(Employee employee)
       {
-         SaveEmployeeOperation operation = new SaveEmployeeOperation(employee, conn);
+         CreateEmployeeOperation operation = new CreateEmployeeOperation(employee, conn);
          operation.Execute();
       }
 
@@ -68,6 +62,29 @@ namespace PayrollDB
       public void RemoveUnionMember(int memberId)
       {
          throw new System.NotImplementedException();
+      }
+
+      public void AddTimecard(int empId, Timecard timecard)
+      {
+         throw new System.NotImplementedException();
+      }
+      public Timecard GetTimecard(int empId, DateTime date)
+      {
+         throw new System.NotImplementedException();
+      }
+      public IList GetTimecardByDateRange(int empId, DateTime startDate, DateTime endDate)
+      {
+         throw new System.NotImplementedException();
+      }
+      public void RemoveTimecard(int empId, DateTime date)
+      {
+         throw new System.NotImplementedException();
+      }
+
+      public void UpdateEmployee(Employee employee)
+      {
+         UpdateEmployeeOperation operation = new UpdateEmployeeOperation(employee, conn);
+         operation.Execute();
       }
    }
 }

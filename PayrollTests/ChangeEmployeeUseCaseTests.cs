@@ -11,18 +11,23 @@ namespace Payroll.Tests
    {
       private InMemoryPayrollDatabase database = new InMemoryPayrollDatabase();
       [TestMethod()]
-      public void ChangeNameUseCaseTest()
+      public void ChangePrimaryFieldsUseCaseTest()
       {
          int empId = 2;
          AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Bill", "Home", 15.25, database);
          t.Execute();
 
-         ChangeNameUseCase cnt = new ChangeNameUseCase(empId, "Bob", database);
+         Employee e = database.GetEmployee(empId);
+         e.Name = "Bob";
+         e.Address = "9, Park Ln.";
+
+         ChangePrimaryFieldsUseCase cnt = new ChangePrimaryFieldsUseCase(e, empId, database);
          cnt.Execute();
 
-         Employee e = database.GetEmployee(empId);
+         e = database.GetEmployee(empId);
          Assert.IsNotNull(e);
          Assert.AreEqual("Bob", e.Name);
+         Assert.AreEqual("9, Park Ln.", e.Address);
       }
 
       [TestMethod()]

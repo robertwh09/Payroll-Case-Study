@@ -3,13 +3,13 @@ using Payroll;
 using System;
 using System.Data;
 
-namespace PayrollDB
+namespace PayrollMySQLDB
 {
    public class LoadEmployeeOperation
    {
       private readonly int empId;
       private readonly MySqlConnection connection;
-      private Employee employee;
+
       public LoadEmployeeOperation(int empId, MySqlConnection connection)
       {
          this.empId = empId;
@@ -34,7 +34,7 @@ namespace PayrollDB
 
          DataRow row = LoadDataFromCommand(command);
 
-         CreateEmplyee(row);
+         CreateEmployee(row);
          AddSchedule(row);
          AddPaymentMethod(row);
          AddClassification(row);
@@ -44,33 +44,33 @@ namespace PayrollDB
       {
          string scheduleType = row["ScheduleType"].ToString();
          if (scheduleType.Equals("weekly"))
-            employee.Schedule = new WeeklySchedule();
+            Employee.Schedule = new WeeklySchedule();
          else if (scheduleType.Equals("biweekly"))
-            employee.Schedule = new BiWeeklySchedule();
+            Employee.Schedule = new BiWeeklySchedule();
          else if (scheduleType.Equals("monthly"))
-            employee.Schedule = new MonthlySchedule();
+            Employee.Schedule = new MonthlySchedule();
       }
 
       public void AddPaymentMethod(DataRow row)
       {
          string methodCode = row["PaymentMethodType"].ToString();
-         LoadPaymentMethodOperation operation = new LoadPaymentMethodOperation(employee, methodCode, connection);
+         LoadPaymentMethodOperation operation = new LoadPaymentMethodOperation(Employee, methodCode, connection);
          operation.Execute();
-         employee.Method = operation.Method;
+         Employee.Method = operation.Method;
       }
 
       public void AddClassification(DataRow row)
       {
          string classificationCode = row["PaymentClassificationType"].ToString();
-         LoadPaymentClassificationOperation operation = new LoadPaymentClassificationOperation(employee, classificationCode, connection);
+         LoadPaymentClassificationOperation operation = new LoadPaymentClassificationOperation(Employee, classificationCode, connection);
          operation.Execute();
-         employee.Classification = operation.Classification;
+         Employee.Classification = operation.Classification;
       }
-      public void CreateEmplyee(DataRow row)
+      public void CreateEmployee(DataRow row)
       {
          string name = row["Name"].ToString();
          string address = row["Address"].ToString();
-         employee = new Employee(empId, name, address);
+         Employee = new Employee(empId, name, address);
       }
       public static DataRow LoadDataFromCommand(MySqlCommand command)
       {
@@ -80,10 +80,6 @@ namespace PayrollDB
          DataTable table = dataset.Tables["table"];
          return table.Rows[0];
       }
-      public Employee Employee
-      {
-         get { return employee; }
-         set { employee = value; }
-      }
+      public Employee Employee { get; set; }
    }
 }

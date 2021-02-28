@@ -9,7 +9,7 @@ namespace Payroll.Tests
    [TestClass()]
    public class AddEmployeeTests
    {
-      private InMemoryPayrollDatabase database = new InMemoryPayrollDatabase();
+      private readonly InMemoryPayrollDatabase database = new InMemoryPayrollDatabase();
       [TestMethod()]
       public void AddSalariedEmployeeTest()
       {
@@ -28,7 +28,10 @@ namespace Payroll.Tests
          PaymentMethod pm = e.Method;
          Assert.IsTrue(pm is HoldMethod);
       }
-      [TestMethod()]
+
+
+
+      [TestMethod]
       public void AddCommissionedEmployeeTest()
       {
          int empId = 2;
@@ -55,7 +58,7 @@ namespace Payroll.Tests
          PaymentMethod pm = e.Method;
          Assert.IsTrue(pm is HoldMethod);
       }
-      [TestMethod()]
+      [TestMethod]
       public void AddHourlyEmployeeTest()
       {
          int empId = 3;

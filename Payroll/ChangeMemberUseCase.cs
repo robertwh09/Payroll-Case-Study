@@ -4,7 +4,7 @@
    {
       private readonly int memberId;
       private readonly double dues;
-      public ChangeMemberUseCase(int empId, int memberId, double dues, InMemoryPayrollDatabase database) : base(empId, database)
+      public ChangeMemberUseCase(int empId, int memberId, double dues, IPayrollDatabase database) : base(empId, database)
       {
          this.memberId = memberId;
          this.dues = dues;

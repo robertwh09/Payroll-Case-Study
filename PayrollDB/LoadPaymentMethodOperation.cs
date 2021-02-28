@@ -3,7 +3,7 @@ using Payroll;
 using System;
 using System.Data;
 
-namespace PayrollDB
+namespace PayrollMySQLDB
 {
    public class LoadPaymentMethodOperation
    {

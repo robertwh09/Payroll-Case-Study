@@ -4,18 +4,20 @@ using System.Text;
 using MySql.Data.MySqlClient;
 using Payroll;
 
-namespace PayrollDB
+namespace PayrollMySQLDB
 {
-   class SaveEmployeeOperation
+   
+   class CreateEmployeeOperation
    {
+      public static readonly int MYSQL_DUPLICATE_PK = 1062;
       private readonly Employee employee;
       private readonly MySqlConnection conn;
-      private string methodCode;
-      private string classificationCode;
+      private string paymentMethodCode;
+      private string salaryClassificationCode;
       private MySqlCommand insertPaymentMethodCommand;
       private MySqlCommand insertEmployeeCommand;
-      private MySqlCommand insertClassificationCommand;
-      public SaveEmployeeOperation(Employee employee, MySqlConnection conn)
+      private MySqlCommand insertSalaryClassificationCommand;
+      public CreateEmployeeOperation(Employee employee, MySqlConnection conn)
       {
          this.employee = employee;
          this.conn = conn;
@@ -23,15 +25,16 @@ namespace PayrollDB
       public void Execute()
       {
          PrepareToSavePaymentMethod(employee);
-         PrepareToSaveClassification(employee);
-         PrepareToSaveEmployee(employee);
+         PrepareToSaveSalaryClassification(employee);
+         PrepareToInsertEmployee(employee);
+         //TODO need to add code to support Affiliations
 
          MySqlTransaction transaction = conn.BeginTransaction();
          try
          {
             ExecuteCommand(insertEmployeeCommand, transaction);
             ExecuteCommand(insertPaymentMethodCommand, transaction);
-            ExecuteCommand(insertClassificationCommand, transaction);
+            ExecuteCommand(insertSalaryClassificationCommand, transaction);
             transaction.Commit();
          }
          catch (MySqlException e)
@@ -51,29 +54,33 @@ namespace PayrollDB
          }
       }
 
-      private void PrepareToSaveClassification(Employee employee)
+      private void PrepareToSaveSalaryClassification(Employee employee)
       {
          PaymentClassification classification = employee.Classification;
          if (classification is HourlyClassification)
          {
-            classificationCode = "hourly";
+            salaryClassificationCode = "hourly";
             HourlyClassification hourlyClassification = classification as HourlyClassification;
-            insertClassificationCommand = CreateInsertHourlyClassificationCommand(hourlyClassification, employee);
+            insertSalaryClassificationCommand = CreateInsertHourlyClassificationCommand(hourlyClassification, employee);
+            //TODO need to add code to support Timecards
+            HourlyClassification hc = classification as HourlyClassification;
+            //hc.GetTimeCard();
          }
          else if (classification is SalariedClassification)
          {
-            classificationCode = "salary";
+            salaryClassificationCode = "salary";
             SalariedClassification salariedClassification = classification as SalariedClassification;
-            insertClassificationCommand = CreateInsertSalariedClassificationCommand(salariedClassification, employee);
+            insertSalaryClassificationCommand = CreateInsertSalariedClassificationCommand(salariedClassification, employee);
          }
          else if (classification is CommissionedClassification)
          {
-            classificationCode = "commission";
+            salaryClassificationCode = "commission";
             CommissionedClassification commissionClassification = classification as CommissionedClassification;
-            insertClassificationCommand = CreateInsertCommissionClassificationCommand(commissionClassification, employee);
+            insertSalaryClassificationCommand = CreateInsertCommissionClassificationCommand(commissionClassification, employee);
+            //TODO need to add code to support Sales receipts
          }
          else
-            classificationCode = "unknown";
+            salaryClassificationCode = "unknown";
       }
 
       private MySqlCommand CreateInsertSalariedClassificationCommand(SalariedClassification classification, Employee employee)
@@ -85,19 +92,19 @@ namespace PayrollDB
          return command;
       }
 
-      private void PrepareToSaveEmployee(Employee employee)
+      private void PrepareToInsertEmployee(Employee employee)
       {
          string sql = "insert into Employee values (@EmpId, @Name, @Address, @ScheduleType, @PaymentMethodType, @PaymentClassificationType)";
          insertEmployeeCommand = new MySqlCommand(sql);
          insertEmployeeCommand.Parameters.AddWithValue("@EmpId", employee.EmpId);
          insertEmployeeCommand.Parameters.AddWithValue("@Name", employee.Name);
          insertEmployeeCommand.Parameters.AddWithValue("@Address", employee.Address);
-         insertEmployeeCommand.Parameters.AddWithValue("@ScheduleType", ScheduleCode(employee.Schedule));
-         insertEmployeeCommand.Parameters.AddWithValue("@PaymentMethodType", methodCode);
-         insertEmployeeCommand.Parameters.AddWithValue("@PaymentClassificationType", classificationCode);
+         insertEmployeeCommand.Parameters.AddWithValue("@ScheduleType", PaymentScheduleCode(employee.Schedule));
+         insertEmployeeCommand.Parameters.AddWithValue("@PaymentMethodType", paymentMethodCode);
+         insertEmployeeCommand.Parameters.AddWithValue("@PaymentClassificationType", salaryClassificationCode);
       }
 
-      private static string ScheduleCode(PaymentSchedule schedule)
+      private static string PaymentScheduleCode(PaymentSchedule schedule)
       {
          if (schedule is MonthlySchedule)
             return "monthly";
@@ -113,21 +120,21 @@ namespace PayrollDB
       {
          PaymentMethod method = employee.Method;
          if (method is HoldMethod)
-            methodCode = "hold";
+            paymentMethodCode = "hold";
          else if (method is DirectDepositMethod)
          {
-            methodCode = "direct";
+            paymentMethodCode = "direct";
             DirectDepositMethod ddMethod = method as DirectDepositMethod;
             insertPaymentMethodCommand = CreateInsertDirectDepositCommand(ddMethod, employee);
          }
          else if (method is MailMethod)
          {
-            methodCode = "mail";
+            paymentMethodCode = "mail";
             MailMethod mailMethod = method as MailMethod;
             insertPaymentMethodCommand = CreateInsertMailMethodCommand(mailMethod, employee);
          }
          else
-            methodCode = "unknown";
+            paymentMethodCode = "unknown";
       }
 
       private MySqlCommand CreateInsertCommissionClassificationCommand(CommissionedClassification classification, Employee employee)
@@ -142,8 +149,7 @@ namespace PayrollDB
 
       private MySqlCommand CreateInsertMailMethodCommand(MailMethod mailMethod, Employee employee)
       {
-         string sql = "insert into PaycheckAddress " +
-         "values (@Address, @EmpId)";
+         string sql = "insert into PaycheckAddress values (@Address, @EmpId)";
          MySqlCommand command = new MySqlCommand(sql);
          command.Parameters.AddWithValue("@Address", mailMethod.Address);
          command.Parameters.AddWithValue("@EmpId", employee.EmpId);

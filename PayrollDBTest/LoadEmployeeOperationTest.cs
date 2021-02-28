@@ -3,7 +3,7 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using Payroll;
 
-namespace PayrollDB.Tests
+namespace PayrollMySQLDB.Tests
 {
 	[TestClass]
 	public class LoadEmployeeOperationTest
@@ -34,7 +34,7 @@ namespace PayrollDB.Tests
 		{
 			DataRow row = ShuntRow("Name,Address", "Jean", "10 Rue de Roi");
 
-			operation.CreateEmplyee(row);
+			operation.CreateEmployee(row);
 
 			Assert.IsNotNull(operation.Employee);
 			Assert.AreEqual("Jean", operation.Employee.Name);

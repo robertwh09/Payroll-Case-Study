@@ -19,7 +19,7 @@ namespace Payroll
       public override double CalculatePay(Paycheck paycheck)
       {
          double totalPay = 0.0;
-         foreach (TimeCard timeCard in timeCards.Values)
+         foreach (Timecard timeCard in timeCards.Values)
          {
             if (DateUtil.IsInPayPeriod(timeCard.Date,
                paycheck.PayPeriodStartDate,
@@ -29,21 +29,21 @@ namespace Payroll
          return totalPay;
       }
 
-      private double CalculatePayForTimeCard(TimeCard card)
+      private double CalculatePayForTimeCard(Timecard card)
       {
          double overtimeHours = Math.Max(0.0, card.Hours - 8);
          double normalHours = card.Hours - overtimeHours;
          return hourlyRate * normalHours + hourlyRate * 1.5 * overtimeHours;
       }
 
-      internal void AddTimeCard(TimeCard timeCard)
+      internal void AddTimeCard(Timecard timeCard)
       {
          timeCards[timeCard.Date] = timeCard;
       }
 
-      public TimeCard GetTimeCard(DateTime dateTime)
+      public Timecard GetTimeCard(DateTime dateTime)
       {
-         return timeCards[dateTime.Date] as TimeCard;
+         return timeCards[dateTime.Date] as Timecard;
       }
       public override string ToString()
       {

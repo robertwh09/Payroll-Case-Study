@@ -1,7 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Payroll.Tests
 {
@@ -9,22 +7,33 @@ namespace Payroll.Tests
    public class TimeCardUseCaseTests
    {
       private InMemoryPayrollDatabase database = new InMemoryPayrollDatabase();
-      [TestMethod()]
-      public void TimeCardUseCaseTest()
+      [TestMethod]
+      public void AddTimecardTest()
       {
-         int empId = 5;
-         double hourlyRate = 15.25;
-         AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Bill", "Home", hourlyRate, database);
+         int empId = 1;
+         double salary = 1000.0;
+         AddSalariedEmployeeUseCase t = new AddSalariedEmployeeUseCase(empId, "Bob", "Home1", salary, database);
          t.Execute();
-         TimeCardUseCase tct = new TimeCardUseCase(new DateTime(2005, 7, 31), 8.0, empId, database);
-         tct.Execute();
-         Employee e = database.GetEmployee(empId);
-         Assert.IsNotNull(e);
-         PaymentClassification pc = e.Classification;
-         Assert.IsTrue(pc is HourlyClassification);
-         HourlyClassification hc = pc as HourlyClassification; TimeCard tc = hc.GetTimeCard(new DateTime(2005, 7, 31));
-         Assert.IsNotNull(tc);
-         Assert.AreEqual(8.0, tc.Hours);
+
+         DateTime date = new DateTime(2021, 1, 3);
+         Timecard tc = new Timecard(date, 10.5);
+         AddTimecardUseCase tcu = new AddTimecardUseCase(empId, tc, database);
+         tcu.Execute();
+
+         Assert.AreEqual(tc, database.GetTimecard(empId, date));
+      }
+      [TestMethod]
+      public void RemoveTimecardTest()
+      {
+      }
+      [TestMethod]
+      public void ChangeTimecardTest()
+      {
+      }
+
+      [TestMethod]
+      public void GetTimecardDateRangeTest()
+      {
       }
    }
 }

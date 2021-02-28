@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Payroll
 {
@@ -6,7 +8,9 @@ namespace Payroll
    {     
       private static Hashtable employees = new Hashtable();
       private static Hashtable unionMembers = new Hashtable();
-      public void AddEmployee(Employee employee)
+      private static Hashtable timecards = new Hashtable();
+      private static IDictionary timecardDict = new Dictionary<Tuple<int, DateTime>, Timecard>();
+      public void CreateEmployee(Employee employee)
       {
          employees[employee.EmpId] = employee;
       }
@@ -49,6 +53,48 @@ namespace Payroll
       public IList GetAllEmployees()
       {
          throw new System.NotImplementedException();
+      }
+
+      public void AddTimecard(int empId, Timecard timecard)
+      {
+         Tuple<int, DateTime> key = new Tuple<int, DateTime>(empId, timecard.Date);
+         timecardDict.Add(key, timecard);
+      }
+
+      public Timecard GetTimecard(int empId, DateTime date)
+      {
+         Tuple<int, DateTime> key = new Tuple<int, DateTime>(empId, date);
+         Timecard tc = (Timecard)timecardDict[key];
+         return tc;
+      }
+
+
+      public IList GetTimecardByDateRange(int empId, DateTime startDate, DateTime endDate)
+      {
+
+         ArrayList arrayList = new ArrayList();
+         foreach (DictionaryEntry e in timecardDict)
+         {
+            arrayList.Add(e.Key);
+         }
+         return arrayList;
+      }
+
+      public void RemoveTimecard(int empId, DateTime date)
+      {
+         Tuple<int, DateTime> key = new Tuple<int, DateTime>(empId, date);
+         timecardDict.Remove(key);
+      }
+
+      void ChangeEmployee(Employee employee)
+      {
+         throw new NotImplementedException();
+      }
+
+      public void UpdateEmployee(Employee employee)
+      {
+         employees.Remove(employee.EmpId);
+         employees.Add(employee.EmpId, employee);
       }
    }
 }

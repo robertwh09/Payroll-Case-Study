@@ -2,7 +2,7 @@
 {
    public class ChangeUnaffiliatedUseCase : ChangeAffiliationUseCase
    {
-      public ChangeUnaffiliatedUseCase(int empId, InMemoryPayrollDatabase database) : base(empId, database) { }
+      public ChangeUnaffiliatedUseCase(int empId, IPayrollDatabase database) : base(empId, database) { }
       protected override Affiliation Affiliation => new NoAffiliation();
 
       protected override void RecordMembership(Employee e)

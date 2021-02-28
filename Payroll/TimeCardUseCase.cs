@@ -22,7 +22,7 @@ namespace Payroll
          {
             HourlyClassification hc = e.Classification as HourlyClassification;
             if (hc != null)
-               hc.AddTimeCard(new TimeCard(date, hours));
+               hc.AddTimeCard(new Timecard(date, hours));
             else
                throw new InvalidOperationException(
                "Tried to add timecard to" +

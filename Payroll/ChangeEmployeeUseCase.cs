@@ -9,7 +9,7 @@ namespace Payroll
    public abstract class ChangeEmployeeUseCase : UseCase
    {
       private readonly int empId;
-      public ChangeEmployeeUseCase(int empId, InMemoryPayrollDatabase database) : base (database)
+      public ChangeEmployeeUseCase(int empId, IPayrollDatabase database) : base (database)
       {
          this.empId = empId;
       }
@@ -19,8 +19,7 @@ namespace Payroll
          if (e != null)
             Change(e);
          else
-            throw new InvalidOperationException(
-            "No such employee.");
+            throw new InvalidOperationException("No such employee.");
       }
       protected abstract void Change(Employee e);
    }

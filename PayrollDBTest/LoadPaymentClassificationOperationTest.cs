@@ -4,7 +4,7 @@ using System.Data;
 using System;
 using Payroll;
 
-namespace PayrollDB.Tests
+namespace PayrollMySQLDB.Tests
 {
 	[TestClass]
 	public class LoadPaymentClassificationOperationTest
