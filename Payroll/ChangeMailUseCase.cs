@@ -6,7 +6,7 @@ namespace Payroll
 {
 	public class ChangeMailUseCase : ChangeMethodUseCase
 	{
-		public ChangeMailUseCase(int empId, IPayrollDatabase database) : base(empId, database)
+		public ChangeMailUseCase(int empId, PayrollDatabase database) : base(empId, database)
 		{
 		}
 

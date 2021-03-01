@@ -9,7 +9,7 @@ namespace PayrollMySQLDB.Tests
    [TestClass]
    public class SqlPayrollDatabaseTest
    {
-      private IPayrollDatabase database;
+      private PayrollDatabase database;
       private MySqlConnection conn;
       private Employee employee;
 
@@ -49,7 +49,7 @@ namespace PayrollMySQLDB.Tests
       [TestMethod]
       public void AddEmployeeTest()
       {
-         database.CreateEmployee(employee);
+         database.SaveEmployee(employee);
 
          MySqlDataAdapter adpt = new MySqlDataAdapter("SELECT * FROM Employee", conn);
          DataSet dataset = new DataSet();
@@ -60,13 +60,38 @@ namespace PayrollMySQLDB.Tests
          Assert.AreEqual(123, row["EmpId"]); Assert.AreEqual("George", row["Name"]);
          Assert.AreEqual("123 Baker St.", row["Address"]);
          Assert.AreEqual("monthly", row["ScheduleType"]);
-         ClearTables();
+      }
+
+      [TestMethod]
+      public void UpdateEmployeeTest()
+      {
+         database.SaveEmployee(employee);
+
+         employee.Name = "New Name";
+         employee.Address = "New Address";
+         employee.Schedule = new BiWeeklySchedule();
+         employee.Classification = new HourlyClassification(13.5);
+         employee.Method = new HoldMethod();
+
+         database.SaveEmployee(employee);
+
+         MySqlDataAdapter adpt = new MySqlDataAdapter("SELECT * FROM Employee", conn);
+         DataSet dataset = new DataSet();
+         adpt.Fill(dataset);
+         DataTable table = dataset.Tables["table"];
+         Assert.AreEqual(1, table.Rows.Count);
+         DataRow row = table.Rows[0];
+         Assert.AreEqual(123, row["EmpId"]); Assert.AreEqual("New Name", row["Name"]);
+         Assert.AreEqual("New Address", row["Address"]);
+         Assert.AreEqual("biweekly", row["ScheduleType"]);
+         Assert.AreEqual("hourly", row["PaymentClassificationType"]);
+         Assert.AreEqual("hold", row["PaymentMethodType"]);
       }
 
       [TestMethod]
       public void ChangeEmployeePrimaryFieldsTest()
       {
-         database.CreateEmployee(employee);
+         database.SaveEmployee(employee);
          Employee e = database.GetEmployee(123);
          e.Name = "Fred";
          e.Address = "256 Park Ln.";
@@ -77,24 +102,6 @@ namespace PayrollMySQLDB.Tests
          Assert.AreEqual("Fred", e.Name);
          Assert.AreEqual("256 Park Ln.", e.Address);
 
-         ClearTables();
-      }
-
-      [TestMethod]
-      public void AddEmployeeWhichAlreadyExistsTest()
-      {
-         const int MYSQL_DUPLICATE_PK = 1062;
-         ClearTables();
-         try
-         {
-            database.CreateEmployee(employee);
-            database.CreateEmployee(employee);
-            Assert.Fail("A duplicate PK exception needs to occur for this test to work.");
-         }
-         catch (MySqlException e)
-         {
-            Assert.AreEqual(MYSQL_DUPLICATE_PK, e.Number); //duplicate primary key 
-         }
          ClearTables();
       }
 
@@ -112,7 +119,7 @@ namespace PayrollMySQLDB.Tests
       private void CheckSavedScheduleCode(PaymentSchedule schedule, string expectedCode)
       {
          employee.Schedule = schedule;
-         database.CreateEmployee(employee);
+         database.SaveEmployee(employee);
          DataTable table = LoadTable("employee");
          DataRow row = table.Rows[0];
          Assert.AreEqual(expectedCode, row["ScheduleType"]);
@@ -142,7 +149,7 @@ namespace PayrollMySQLDB.Tests
       private void CheckSavedPaymentMethodCode(PaymentMethod method, string expectedCode)
       {
          employee.Method = method;
-         database.CreateEmployee(employee);
+         database.SaveEmployee(employee);
          DataTable table = LoadTable("Employee");
          DataRow row = table.Rows[0];
          Assert.AreEqual(expectedCode, row["PaymentMethodType"]);
@@ -157,7 +164,7 @@ namespace PayrollMySQLDB.Tests
          employee.Method = method;
          try
          {
-            database.CreateEmployee(employee);
+            database.SaveEmployee(employee);
             Assert.Fail("An exception needs to occur for this test to work.");
          }
          catch (MySqlException)
@@ -182,7 +189,7 @@ namespace PayrollMySQLDB.Tests
       private void CheckSavedClassificationCode(PaymentClassification classification, string expectedCode)
       {
          employee.Classification = classification;
-         database.CreateEmployee(employee);
+         database.SaveEmployee(employee);
 
          DataTable table = LoadTable("Employee");
          DataRow row = table.Rows[0];
@@ -221,13 +228,13 @@ namespace PayrollMySQLDB.Tests
       public void SaveMailMethodThenHoldMethod()
       {
          employee.Method = new MailMethod("123 Baker St.");
-         database.CreateEmployee(employee);
+         database.SaveEmployee(employee);
 
          Employee employee2 = new Employee(321, "Ed", "456 Elm St.")
          {
             Method = new HoldMethod()
          };
-         database.CreateEmployee(employee2);
+         database.SaveEmployee(employee2);
 
          DataTable table = LoadTable("PaycheckAddress");
          Assert.AreEqual(1, table.Rows.Count);
@@ -253,7 +260,7 @@ namespace PayrollMySQLDB.Tests
          employee.Schedule = new BiWeeklySchedule();
          employee.Method = new DirectDepositMethod("1st Bank", "0123456");
          employee.Classification = new SalariedClassification(5432.10);
-         database.CreateEmployee(employee);
+         database.SaveEmployee(employee);
          Employee loadedEmployee = database.GetEmployee(123);
          Assert.AreEqual(123, loadedEmployee.EmpId);
          Assert.AreEqual(employee.Name, loadedEmployee.Name);
@@ -279,7 +286,7 @@ namespace PayrollMySQLDB.Tests
          ClearTables();
 
          //Add Affiliation
-         database.CreateEmployee(employee);
+         database.SaveEmployee(employee);
          database.AddAffiliateMember(affliationId, employee);
          employee = database.GetAffiliateMember(affliationId);
          Assert.AreEqual(empId, employee.EmpId);

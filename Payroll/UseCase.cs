@@ -7,9 +7,9 @@ namespace Payroll
 {
    public abstract class UseCase
    {
-      protected readonly IPayrollDatabase database;
+      protected readonly PayrollDatabase database;
 
-      public UseCase(IPayrollDatabase database)
+      public UseCase(PayrollDatabase database)
       {
          this.database = database;
       }

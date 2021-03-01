@@ -6,7 +6,7 @@ namespace Payroll
 {
 	public class ChangeHoldUseCase : ChangeMethodUseCase
 	{
-		public ChangeHoldUseCase(int empId, IPayrollDatabase database)
+		public ChangeHoldUseCase(int empId, PayrollDatabase database)
 			: base(empId, database)
 		{
 		}

@@ -8,7 +8,7 @@ namespace Payroll
    {
       private readonly Timecard timecard;
       private readonly int empId;
-      public ChangeTimecardUseCase(int empId, Timecard timecard, IPayrollDatabase database) : base(database)
+      public ChangeTimecardUseCase(int empId, Timecard timecard, PayrollDatabase database) : base(database)
       {
          this.timecard = timecard;
          this.empId = empId;

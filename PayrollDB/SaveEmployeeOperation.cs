@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using MySql.Data.MySqlClient;
 using Payroll;
 
 namespace PayrollMySQLDB
 {
-   
-   class CreateEmployeeOperation
+   class SaveEmployeeOperation
    {
       public static readonly int MYSQL_DUPLICATE_PK = 1062;
       private readonly Employee employee;
@@ -15,9 +15,11 @@ namespace PayrollMySQLDB
       private string paymentMethodCode;
       private string salaryClassificationCode;
       private MySqlCommand insertPaymentMethodCommand;
-      private MySqlCommand insertEmployeeCommand;
+      private MySqlCommand saveEmployeeCommand;
       private MySqlCommand insertSalaryClassificationCommand;
-      public CreateEmployeeOperation(Employee employee, MySqlConnection conn)
+      private MySqlCommand queryEmployeeExistsCommand;
+
+      public SaveEmployeeOperation(Employee employee, MySqlConnection conn)
       {
          this.employee = employee;
          this.conn = conn;
@@ -26,15 +28,23 @@ namespace PayrollMySQLDB
       {
          PrepareToSavePaymentMethod(employee);
          PrepareToSaveSalaryClassification(employee);
-         PrepareToInsertEmployee(employee);
-         //TODO need to add code to support Affiliations
+         //check if employee already exists in database
+         
+         if (QueryEmployeeExists(employee))
+         {
+            PrepareToUpdateEmployee(employee);
+         }
+         else
+         {
+            PrepareToInsertEmployee(employee);
+         }
 
          MySqlTransaction transaction = conn.BeginTransaction();
          try
          {
-            ExecuteCommand(insertEmployeeCommand, transaction);
-            ExecuteCommand(insertPaymentMethodCommand, transaction);
-            ExecuteCommand(insertSalaryClassificationCommand, transaction);
+            ExecuteNonQueryCommand(saveEmployeeCommand, transaction);
+            ExecuteNonQueryCommand(insertPaymentMethodCommand, transaction);
+            ExecuteNonQueryCommand(insertSalaryClassificationCommand, transaction);
             transaction.Commit();
          }
          catch (MySqlException e)
@@ -44,7 +54,24 @@ namespace PayrollMySQLDB
          }
       }
 
-      private void ExecuteCommand(MySqlCommand command, MySqlTransaction transaction)
+      private bool QueryEmployeeExists(Employee employee)
+      {
+         string sql = "SELECT TOP 1 Employee.EmpId FROM Employee WHERE employee.EmpId=@EmpId";
+         queryEmployeeExistsCommand = new MySqlCommand(sql);
+         queryEmployeeExistsCommand.Parameters.AddWithValue("@EmpId", employee.EmpId);
+
+         LoadEmployeeOperation lo = new LoadEmployeeOperation(employee.EmpId, conn);
+         try
+         {
+            lo.Execute();
+         }
+         catch
+         {
+            return false;
+         }
+            return true;
+      }
+      private void ExecuteNonQueryCommand(MySqlCommand command, MySqlTransaction transaction)
       {
          if (command != null)
          {
@@ -62,9 +89,7 @@ namespace PayrollMySQLDB
             salaryClassificationCode = "hourly";
             HourlyClassification hourlyClassification = classification as HourlyClassification;
             insertSalaryClassificationCommand = CreateInsertHourlyClassificationCommand(hourlyClassification, employee);
-            //TODO need to add code to support Timecards
             HourlyClassification hc = classification as HourlyClassification;
-            //hc.GetTimeCard();
          }
          else if (classification is SalariedClassification)
          {
@@ -77,7 +102,6 @@ namespace PayrollMySQLDB
             salaryClassificationCode = "commission";
             CommissionedClassification commissionClassification = classification as CommissionedClassification;
             insertSalaryClassificationCommand = CreateInsertCommissionClassificationCommand(commissionClassification, employee);
-            //TODO need to add code to support Sales receipts
          }
          else
             salaryClassificationCode = "unknown";
@@ -95,13 +119,26 @@ namespace PayrollMySQLDB
       private void PrepareToInsertEmployee(Employee employee)
       {
          string sql = "insert into Employee values (@EmpId, @Name, @Address, @ScheduleType, @PaymentMethodType, @PaymentClassificationType)";
-         insertEmployeeCommand = new MySqlCommand(sql);
-         insertEmployeeCommand.Parameters.AddWithValue("@EmpId", employee.EmpId);
-         insertEmployeeCommand.Parameters.AddWithValue("@Name", employee.Name);
-         insertEmployeeCommand.Parameters.AddWithValue("@Address", employee.Address);
-         insertEmployeeCommand.Parameters.AddWithValue("@ScheduleType", PaymentScheduleCode(employee.Schedule));
-         insertEmployeeCommand.Parameters.AddWithValue("@PaymentMethodType", paymentMethodCode);
-         insertEmployeeCommand.Parameters.AddWithValue("@PaymentClassificationType", salaryClassificationCode);
+         saveEmployeeCommand = new MySqlCommand(sql);
+         saveEmployeeCommand.Parameters.AddWithValue("@EmpId", employee.EmpId);
+         saveEmployeeCommand.Parameters.AddWithValue("@Name", employee.Name);
+         saveEmployeeCommand.Parameters.AddWithValue("@Address", employee.Address);
+         saveEmployeeCommand.Parameters.AddWithValue("@ScheduleType", PaymentScheduleCode(employee.Schedule));
+         saveEmployeeCommand.Parameters.AddWithValue("@PaymentMethodType", paymentMethodCode);
+         saveEmployeeCommand.Parameters.AddWithValue("@PaymentClassificationType", salaryClassificationCode);
+      }
+
+      private void PrepareToUpdateEmployee(Employee employee)
+      {
+         string sql = "update Employee set EmpID = @EmpId, Name=@Name, Address=@Address, ScheduleType=@ScheduleType," +
+            "PaymentMethodType=@PaymentMethodType, PaymentClassificationType=@PaymentClassificationType where EmpID = @EmpId";
+         saveEmployeeCommand = new MySqlCommand(sql);
+         saveEmployeeCommand.Parameters.AddWithValue("@EmpId", employee.EmpId);
+         saveEmployeeCommand.Parameters.AddWithValue("@Name", employee.Name);
+         saveEmployeeCommand.Parameters.AddWithValue("@Address", employee.Address);
+         saveEmployeeCommand.Parameters.AddWithValue("@ScheduleType", PaymentScheduleCode(employee.Schedule));
+         saveEmployeeCommand.Parameters.AddWithValue("@PaymentMethodType", paymentMethodCode);
+         saveEmployeeCommand.Parameters.AddWithValue("@PaymentClassificationType", salaryClassificationCode);
       }
 
       private static string PaymentScheduleCode(PaymentSchedule schedule)

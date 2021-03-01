@@ -6,7 +6,7 @@ namespace Payroll
 {
 	public abstract class ChangeMethodUseCase : ChangeEmployeeTemplate
 	{
-		public ChangeMethodUseCase(int empId, IPayrollDatabase database) : base(empId, database)
+		public ChangeMethodUseCase(int empId, PayrollDatabase database) : base(empId, database)
 		{ }
 
 		protected override void Change(Employee e)

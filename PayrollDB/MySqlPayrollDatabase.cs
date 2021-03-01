@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Data;
-using MySql.Data.MySqlClient;
 using Payroll;
 
 namespace PayrollMySQLDB
 {
-   public class MySqlPayrollDatabase : IPayrollDatabase
+   public class MySqlPayrollDatabase : PayrollDatabase
    {
       private readonly MySql.Data.MySqlClient.MySqlConnection conn;
       
@@ -22,9 +20,9 @@ namespace PayrollMySQLDB
          conn.Close();
       }
 
-      public void CreateEmployee(Employee employee)
+      public void SaveEmployee(Employee employee)
       {
-         CreateEmployeeOperation operation = new CreateEmployeeOperation(employee, conn);
+         SaveEmployeeOperation operation = new SaveEmployeeOperation(employee, conn);
          operation.Execute();
       }
 
@@ -60,11 +58,10 @@ namespace PayrollMySQLDB
       {
          try
          {
+            //TODO why are we using the Command pattern here?
             GetEmpIDFromAffiliateIDOperation loadOperation = new GetEmpIDFromAffiliateIDOperation(affId, conn);
             loadOperation.Execute();
-            int empId = loadOperation.EmpId;
-            Employee employee = GetEmployee(empId);
-            return employee;
+            return GetEmployee(loadOperation.EmpId);
          }
          catch (Exception)
          {
@@ -80,18 +77,22 @@ namespace PayrollMySQLDB
 
       public void AddTimecard(int empId, Timecard timecard)
       {
+         //TODO need to add support to Add Timecards
          throw new System.NotImplementedException();
       }
       public Timecard GetTimecard(int empId, DateTime date)
       {
+         //TODO need to add support to Get Timecards by Date
          throw new System.NotImplementedException();
       }
       public IList GetTimecard(int empId, DateTime startDate, DateTime endDate)
       {
+         //TODO need to add support to Get Timecards by Date range
          throw new System.NotImplementedException();
       }
       public void RemoveTimecard(int empId, DateTime date)
       {
+         //TODO need to add support to Delete Timecards
          throw new System.NotImplementedException();
       }
 

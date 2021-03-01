@@ -8,7 +8,7 @@ namespace Payroll
 	{
 		private readonly double salary;
 
-		public ChangeSalaryUseCase(int id, double salary, IPayrollDatabase database) : base(id, database)
+		public ChangeSalaryUseCase(int id, double salary, PayrollDatabase database) : base(id, database)
 		{
 			this.salary = salary;
 		}

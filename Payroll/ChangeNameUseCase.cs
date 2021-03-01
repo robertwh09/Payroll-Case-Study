@@ -7,7 +7,7 @@ namespace Payroll
    public class ChangeNameUseCase : ChangeEmployeeTemplate
    {
       private readonly string newName;
-      public ChangeNameUseCase(int empId, string newName, IPayrollDatabase database) : base(empId, database)
+      public ChangeNameUseCase(int empId, string newName, PayrollDatabase database) : base(empId, database)
       {
          this.newName = newName;
       }     

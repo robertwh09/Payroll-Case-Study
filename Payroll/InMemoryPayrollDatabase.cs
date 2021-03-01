@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Payroll
 {
-   public class InMemoryPayrollDatabase : IPayrollDatabase
+   public class InMemoryPayrollDatabase : PayrollDatabase
    {     
       private static Hashtable employees = new Hashtable();
       private static Hashtable unionMembers = new Hashtable();
@@ -12,7 +12,7 @@ namespace Payroll
       private static Hashtable affiliationDues = new Hashtable();
       private static Hashtable serviceCharges = new Hashtable();
 
-      public void CreateEmployee(Employee employee)
+      public void SaveEmployee(Employee employee)
       {
          employees[employee.EmpId] = employee;
       }

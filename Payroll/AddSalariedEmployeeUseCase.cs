@@ -7,7 +7,7 @@ namespace Payroll
    public class AddSalariedEmployeeUseCase : AddEmployeeUseCase
    {
       private readonly double salary;
-      public AddSalariedEmployeeUseCase(int id, string name, string address, double salary, IPayrollDatabase database)
+      public AddSalariedEmployeeUseCase(int id, string name, string address, double salary, PayrollDatabase database)
          : base(id, name, address, database)
       {
          this.salary = salary;

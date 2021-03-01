@@ -4,7 +4,7 @@
    {
       private readonly int memberId;
       private readonly double dues;
-      public ChangeAffiliationUseCase(int empId, int memberId, double dues, IPayrollDatabase database) : base(empId, database)
+      public ChangeAffiliationUseCase(int empId, int memberId, double dues, PayrollDatabase database) : base(empId, database)
       {
          this.memberId = memberId;
          this.dues = dues;

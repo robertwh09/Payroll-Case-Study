@@ -9,7 +9,7 @@ namespace PayrollMySQLDB.Tests
    [TestClass()]
    public class SaveTimecardOperationTests
    {
-      private IPayrollDatabase database;
+      private PayrollDatabase database;
       private MySqlConnection conn;
       private Employee employee;
       

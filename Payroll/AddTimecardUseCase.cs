@@ -9,7 +9,7 @@ namespace Payroll
       private readonly int empId;
       private readonly Timecard timecard;
 
-      public AddTimecardUseCase(int empId, Timecard timecard, IPayrollDatabase database) : base (database)
+      public AddTimecardUseCase(int empId, Timecard timecard, PayrollDatabase database) : base (database)
       {
          this.empId = empId;
          this.timecard = timecard;

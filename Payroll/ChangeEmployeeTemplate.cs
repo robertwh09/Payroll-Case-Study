@@ -9,7 +9,7 @@ namespace Payroll
    public abstract class ChangeEmployeeTemplate : UseCase
    {
       private readonly int empId;
-      public ChangeEmployeeTemplate(int empId, IPayrollDatabase database) : base (database)
+      public ChangeEmployeeTemplate(int empId, PayrollDatabase database) : base (database)
       {
          this.empId = empId;
       }

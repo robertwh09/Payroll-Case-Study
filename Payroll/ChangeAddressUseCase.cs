@@ -7,7 +7,7 @@ namespace Payroll
    public class ChangeAddressUseCase : ChangeEmployeeTemplate
    {
       private readonly string newAddress;
-      public ChangeAddressUseCase(int empId, string newAddress, IPayrollDatabase database) : base(empId, database)
+      public ChangeAddressUseCase(int empId, string newAddress, PayrollDatabase database) : base(empId, database)
       {
          this.newAddress = newAddress;
       }

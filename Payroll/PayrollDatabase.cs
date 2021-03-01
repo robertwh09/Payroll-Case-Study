@@ -3,9 +3,9 @@ using System.Collections;
 
 namespace Payroll
 {
-   public interface IPayrollDatabase
+   public interface PayrollDatabase
    {
-		void CreateEmployee(Employee employee);
+		void SaveEmployee(Employee employee);
 		void UpdateEmployee(Employee employee);
 		Employee GetEmployee(int id);
 		void DeleteEmployee(int id);
@@ -22,6 +22,7 @@ namespace Payroll
 		IList GetTimecard(int empId, DateTime startDate, DateTime endDate);
 		void RemoveTimecard(int empId, DateTime date);
 
+		//TODO need to add Affiliate Dues
 		/*
 		void AddAffiliateDues(int affId, double dues);
 		double GetAffiliateDues(int affId);
@@ -29,12 +30,14 @@ namespace Payroll
 		void RemoveAffiliateDues(int affId, double dues);
 		*/
 
+		//TODO need to add Service Charges
 		/*
 		void AddAffiliateServiceCharge(int affId, DateTime date, double serviceCharge);
 		IList GetAffiliateServiceCharge(int affId, DateTime startDate, DateTime endDate);
 		void RemoveAffiliateServiceCharge(int affId, DateTime date, double serviceCharge);
 		*/
 
+		//TODO need to add Sales Receipts
 		/*
 		void AddSalesReceipt(int empId, DateTime date, double salesAmount);
 		SalesReceipt GetSalesReceipt(int empId, DateTime date);

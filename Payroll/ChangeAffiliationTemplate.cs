@@ -4,7 +4,7 @@
    //But the the abstract RecordMembership() allows the derivatives to manage what needs to be changed
    public abstract class ChangeAffiliationTemplate : ChangeEmployeeTemplate
    {
-      public ChangeAffiliationTemplate(int empId, IPayrollDatabase database) : base(empId, database) { }
+      public ChangeAffiliationTemplate(int empId, PayrollDatabase database) : base(empId, database) { }
       protected override void Change(Employee e)
       {
          RecordMembership(e);
