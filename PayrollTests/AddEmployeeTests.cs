@@ -1,15 +1,32 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Payroll;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using PayrollMySQLDB;
+using MySql.Data.MySqlClient;
 
 namespace Payroll.Tests
 {
    [TestClass()]
    public class AddEmployeeTests
    {
-      private readonly InMemoryPayrollDatabase database = new InMemoryPayrollDatabase();
+      private PayrollDatabase database;
+      private MySqlConnection conn;
+
+      [TestInitialize]
+      public void TestInitialize()
+      {/*
+         this.database = new MySqlPayrollDatabase();
+         string connString = "Database=Payroll;Data Source=localhost;user id=sa;password=abc";
+         conn = new MySql.Data.MySqlClient.MySqlConnection(connString);
+         conn.Open();
+         */
+         this.database = new InMemoryPayrollDatabase();
+      }
+
+      [TestCleanup]
+      public void TestCleanup()
+      {
+         //conn.Close();
+      }
+
       [TestMethod()]
       public void AddSalariedEmployeeTest()
       {
@@ -47,7 +64,7 @@ namespace Payroll.Tests
          Assert.IsTrue(pc is CommissionedClassification);
 
          CommissionedClassification cc = pc as CommissionedClassification;
-         Assert.AreEqual(baseSalary, cc.BaseSalary, .001);
+         Assert.AreEqual(baseSalary, cc.Salary, .001);
 
          CommissionedClassification hc = pc as CommissionedClassification;
          Assert.AreEqual(commissionRate, hc.CommissionRate, .001);

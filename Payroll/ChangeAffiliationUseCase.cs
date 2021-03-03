@@ -13,9 +13,9 @@
       {
          get { return new UnionAffiliation(memberId, dues); }
       }
-      protected override void RecordMembership(Employee e)
+      protected override void RecordMembership(Employee employee)
       {
-         database.AddAffiliateMember(memberId, e);
+         database.AddAffiliateMember(memberId, employee);
       }
    }
 }

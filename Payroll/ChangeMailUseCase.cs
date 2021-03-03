@@ -4,15 +4,17 @@ using System.Text;
 
 namespace Payroll
 {
-	public class ChangeMailUseCase : ChangeMethodUseCase
+	public class ChangeMailUseCase : ChangeMethodTemplate
 	{
-		public ChangeMailUseCase(int empId, PayrollDatabase database) : base(empId, database)
+		private readonly string address;
+		public ChangeMailUseCase(int empId, string address, PayrollDatabase database) : base(empId, database)
 		{
+			this.address = address;
 		}
 
 		protected override PaymentMethod Method
 		{
-			get { return new MailMethod("3.14 Pi St"); }
+			get { return new MailMethod(address); }
 		}
 
 	}

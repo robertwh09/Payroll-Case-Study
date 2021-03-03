@@ -6,7 +6,7 @@ namespace Payroll.Tests
    [TestClass()]
    public class TimeCardUseCaseTests
    {
-      private InMemoryPayrollDatabase database = new InMemoryPayrollDatabase();
+      private PayrollDatabase database = new InMemoryPayrollDatabase();
       [TestMethod]
       public void AddTimecardTest()
       {

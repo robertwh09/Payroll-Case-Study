@@ -8,17 +8,17 @@ namespace Payroll
    public class CommissionedClassification : PaymentClassification
    {
       private double commissionRate;
-      private double baseSalary;
+      private double salary;
       private Hashtable salesReceipts = new Hashtable();
 
       public CommissionedClassification(double salary, double commissionRate)
       {
-         this.baseSalary = salary;
+         this.salary = salary;
          this.commissionRate = commissionRate;
       }
 
       public double CommissionRate { get => commissionRate; }
-      public double BaseSalary { get => baseSalary; }
+      public double Salary { get => salary; }
 
       public void AddSalesReceipt(SalesReceipt receipt)
       {
@@ -40,11 +40,11 @@ namespace Payroll
                paycheck.PayPeriodEndDate))
                salesTotal += receipt.SaleAmount;
          }
-         return baseSalary + (salesTotal * commissionRate * 0.01); ;
+         return salary + (salesTotal * commissionRate * 0.01); ;
       }
       public override string ToString()
       {
-         return String.Format("${0} + {1}% sales commission", baseSalary, commissionRate);
+         return String.Format("${0} + {1}% sales commission", salary, commissionRate);
       }
    }
 }

@@ -8,7 +8,7 @@ namespace Payroll
 		private readonly DateTime payDate;
 		private Hashtable paychecks = new Hashtable();
 
-		public PaydayUseCase(DateTime payDate, InMemoryPayrollDatabase database) : base (database)
+		public PaydayUseCase(DateTime payDate, PayrollDatabase database) : base (database)
 		{
 			this.payDate = payDate;
 		}

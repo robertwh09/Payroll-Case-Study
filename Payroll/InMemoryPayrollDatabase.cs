@@ -27,14 +27,14 @@ namespace Payroll
          employees.Remove(id);
       }
 
-      public void AddAffiliateMember(int id, Employee e)
+      public void AddAffiliateMember(int memberId, Employee employee)
       {
-         unionMembers[id] = e;
+         unionMembers[memberId] = employee;
       }
 
-      public Employee GetAffiliateMember(int id)
+      public Employee GetAffiliateMember(int memberId)
       {
-         return unionMembers[id] as Employee;
+         return unionMembers[memberId] as Employee;
       }
 
       public void RemoveAffiliateMember(int memberId)

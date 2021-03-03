@@ -33,34 +33,34 @@ namespace PayrollMySQLDB.Tests
       }
 
       [TestMethod]
-      public void AddTimecardToEmployeeTest()
+      public void AddTimecardToEmployee()
       {
          Timecard tc = new Timecard(new DateTime(2021, 1, 13), 4.5); //YYYY/MM/DD, hours
          HourlyClassification hc =  employee.Classification as HourlyClassification;
       }
 
       [TestMethod]
-      public void AddTimecardToNonExistentEmployeeTest()
+      public void AddTimecardToNonExistentEmployee()
       {
-
+         Assert.IsTrue(false);
       }
 
       [TestMethod]
-      public void GetTimecardForNonExistentEmployeeTest()
+      public void GetTimecardForNonExistentEmployee()
       {
-
+         Assert.IsTrue(false);
       }
 
       [TestMethod]
-      public void GetAllTimecardsForEmployeeTest()
+      public void GetAllTimecardsForEmployee()
       {
-
+         Assert.IsTrue(false);
       }
 
       [TestMethod]
-      public void GetTimecardsForEmployeeDaterangeTest()
+      public void GetTimecardsForEmployeeDaterange()
       {
-
+         Assert.IsTrue(false);
       }
    }
 }

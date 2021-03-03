@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Payroll
 {
-	public class ChangeSalaryUseCase : ChangeClassificationUseCase
+	public class ChangeSalaryUseCase : ChangeClassificationTemplate
 	{
 		private readonly double salary;
 

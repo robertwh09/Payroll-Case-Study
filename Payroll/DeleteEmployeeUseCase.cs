@@ -7,7 +7,7 @@ namespace Payroll
    public class DeleteEmployeeUseCase : UseCase
    {
       private readonly int id;
-      public DeleteEmployeeUseCase(int id, InMemoryPayrollDatabase database) : base (database)
+      public DeleteEmployeeUseCase(int id, PayrollDatabase database) : base (database)
       {
          this.id = id;
       }

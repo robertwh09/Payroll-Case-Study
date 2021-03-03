@@ -8,7 +8,7 @@ namespace Payroll.Tests
    [TestClass()]
    public class PaySingleEmployeeTests
    {
-      private InMemoryPayrollDatabase database = new InMemoryPayrollDatabase();
+      private PayrollDatabase database = new InMemoryPayrollDatabase();
       [TestMethod()]
       public void PaySingleSalariedEmployee()
       {

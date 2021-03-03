@@ -9,7 +9,7 @@ namespace Payroll
       private readonly DateTime date;
       private readonly double hours;
       private readonly int empId;
-      public TimeCardUseCase(DateTime date, double hours, int empId, InMemoryPayrollDatabase database) : base (database)
+      public TimeCardUseCase(DateTime date, double hours, int empId, PayrollDatabase database) : base (database)
       {
          this.date = date;
          this.hours = hours;

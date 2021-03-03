@@ -1,11 +1,11 @@
 ﻿namespace Payroll
 {
-	public class ChangeCommissionedUseCase: ChangeClassificationUseCase
+	public class ChangeCommissionedUseCase: ChangeClassificationTemplate
 	{
 		private readonly double baseSalary;
 		private readonly double commissionRate;
 
-		public ChangeCommissionedUseCase(int id, double baseSalary, double commissionRate, PayrollDatabase database) : base(id, database)
+		public ChangeCommissionedUseCase(int empId, double baseSalary, double commissionRate, PayrollDatabase database) : base(empId, database)
 		{
 			this.baseSalary = baseSalary;
 			this.commissionRate = commissionRate;

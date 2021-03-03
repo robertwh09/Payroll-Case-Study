@@ -33,7 +33,7 @@ namespace PayrollMySQLDB.Tests
 		{
 			operation = new LoadPaymentClassificationOperation(employee, "hourly", null);
 			operation.Prepare();
-			DataRow row = LoadEmployeeOperationTest.ShuntRow("HourlyRate", 15.45);
+			DataRow row = LoadEmployeeOperationTests.ShuntRow("HourlyRate", 15.45);
 			operation.CreateClassification(row);
 
 			PaymentClassification classification = this.operation.Classification;
@@ -57,7 +57,7 @@ namespace PayrollMySQLDB.Tests
 		{
 			operation = new LoadPaymentClassificationOperation(employee, "salary", null);
 			operation.Prepare();
-			DataRow row = LoadEmployeeOperationTest.ShuntRow("Salary", 2500.00);
+			DataRow row = LoadEmployeeOperationTests.ShuntRow("Salary", 2500.00);
 			operation.CreateClassification(row);
 
 			PaymentClassification classification = this.operation.Classification;
@@ -81,13 +81,13 @@ namespace PayrollMySQLDB.Tests
 		{
 			operation = new LoadPaymentClassificationOperation(employee, "commission", null);
 			operation.Prepare();
-			DataRow row = LoadEmployeeOperationTest.ShuntRow("Salary,Commission", 999.99, 9.9);
+			DataRow row = LoadEmployeeOperationTests.ShuntRow("Salary,Commission", 999.99, 9.9);
 			operation.CreateClassification(row);
 
 			PaymentClassification classification = this.operation.Classification;
 			Assert.IsTrue(classification is CommissionedClassification);
 			CommissionedClassification commissionClassification = classification as CommissionedClassification;
-			Assert.AreEqual(999.99, commissionClassification.BaseSalary, 0.01);
+			Assert.AreEqual(999.99, commissionClassification.Salary, 0.01);
 			Assert.AreEqual(9.9, commissionClassification.CommissionRate, 0.01);
 		}
 	}

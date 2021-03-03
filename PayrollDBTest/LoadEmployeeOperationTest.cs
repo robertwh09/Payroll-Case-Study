@@ -6,7 +6,7 @@ using Payroll;
 namespace PayrollMySQLDB.Tests
 {
 	[TestClass]
-	public class LoadEmployeeOperationTest
+	public class LoadEmployeeOperationTests
 	{
 		private LoadEmployeeOperation operation;
 		private Employee employee;

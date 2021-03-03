@@ -9,7 +9,7 @@ namespace Payroll
       private readonly int memberId;
       private readonly DateTime time;
       private readonly double charge;
-      public ServiceChargeUseCase(int id, DateTime time, double charge, InMemoryPayrollDatabase database) : base (database)
+      public ServiceChargeUseCase(int id, DateTime time, double charge, PayrollDatabase database) : base (database)
       {
          this.memberId = id;
          this.time = time;

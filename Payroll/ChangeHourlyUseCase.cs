@@ -1,6 +1,6 @@
 ﻿namespace Payroll
 {
-   public class ChangeHourlyUseCase : ChangeClassificationUseCase
+   public class ChangeHourlyUseCase : ChangeClassificationTemplate
    {
       private readonly double hourlyRate;
       public ChangeHourlyUseCase(int id, double hourlyRate, PayrollDatabase database) : base(id, database)

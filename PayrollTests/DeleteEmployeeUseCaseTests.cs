@@ -9,7 +9,7 @@ namespace Payroll.Tests
    [TestClass()]
    public class DeleteEmployeeUseCaseTests
    {
-      private InMemoryPayrollDatabase database = new InMemoryPayrollDatabase();
+      private PayrollDatabase database = new InMemoryPayrollDatabase();
       [TestMethod()]
       public void DeleteEmployeeUseCaseTest()
       {

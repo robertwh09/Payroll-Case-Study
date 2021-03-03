@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payroll", "Payroll\Payroll.csproj", "{245820AD-187A-40E8-8A9F-8A5A2CCD868F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayrollTests", "PayrollTests\PayrollTests.csproj", "{C81AF3A7-2454-4983-8522-337E9DD0E18F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{718BF62B-5ABF-44E2-9B07-11C5760C6F06} = {718BF62B-5ABF-44E2-9B07-11C5760C6F06}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayrollMySQLDB", "PayrollDB\PayrollMySQLDB.csproj", "{718BF62B-5ABF-44E2-9B07-11C5760C6F06}"
 	ProjectSection(ProjectDependencies) = postProject

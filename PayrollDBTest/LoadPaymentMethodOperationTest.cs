@@ -7,7 +7,7 @@ using Payroll;
 namespace PayrollMySQLDB.Tests
 {
 	[TestClass]
-	public class LoadPaymentMethodOperationTest
+	public class LoadPaymentMethodOperationTests
 	{
 		private Employee employee;
 		private LoadPaymentMethodOperation operation;
@@ -42,7 +42,7 @@ namespace PayrollMySQLDB.Tests
 		{
 			operation = new LoadPaymentMethodOperation(employee, "direct", null);
 			operation.Prepare();
-			DataRow row = LoadEmployeeOperationTest.ShuntRow("Bank,Account", "1st Bank", "0123456");
+			DataRow row = LoadEmployeeOperationTests.ShuntRow("Bank,Account", "1st Bank", "0123456");
 			operation.CreatePaymentMethod(row);
 
 			PaymentMethod method = this.operation.Method;
@@ -67,7 +67,7 @@ namespace PayrollMySQLDB.Tests
 		{
 			operation = new LoadPaymentMethodOperation(employee, "mail", null);
 			operation.Prepare();
-			DataRow row = LoadEmployeeOperationTest.ShuntRow("Address", "23 Pine Ct");
+			DataRow row = LoadEmployeeOperationTests.ShuntRow("Address", "23 Pine Ct");
 			operation.CreatePaymentMethod(row);
 
 			PaymentMethod method = this.operation.Method;

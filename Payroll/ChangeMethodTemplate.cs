@@ -4,15 +4,16 @@ using System.Text;
 
 namespace Payroll
 {
-	public abstract class ChangeMethodUseCase : ChangeEmployeeTemplate
+	public abstract class ChangeMethodTemplate : ChangeEmployeeTemplate
 	{
-		public ChangeMethodUseCase(int empId, PayrollDatabase database) : base(empId, database)
+		public ChangeMethodTemplate(int empId, PayrollDatabase database) : base(empId, database)
 		{ }
 
 		protected override void Change(Employee e)
 		{
 			PaymentMethod method = Method;
 			e.Method = method;
+			database.SaveEmployee(e);
 		}
 
 		protected abstract PaymentMethod Method { get; }

@@ -9,7 +9,7 @@ namespace Payroll.Tests
    [TestClass()]
    public class ChangeEmployeeUseCaseTests
    {
-      private InMemoryPayrollDatabase database = new InMemoryPayrollDatabase();
+      private PayrollDatabase database = new InMemoryPayrollDatabase();
       [TestMethod()]
       public void ChangeNameUseCaseTest()
       {
@@ -127,7 +127,7 @@ namespace Payroll.Tests
          Assert.IsNotNull(pc);
          Assert.IsTrue(pc is CommissionedClassification);
          CommissionedClassification cc = pc as CommissionedClassification;
-         Assert.AreEqual(1250.00, cc.BaseSalary, .001);
+         Assert.AreEqual(1250.00, cc.Salary, .001);
          Assert.AreEqual(5.6, cc.CommissionRate, .001);
          PaymentSchedule ps = e.Schedule;
          Assert.IsTrue(ps is BiWeeklySchedule);
@@ -139,7 +139,7 @@ namespace Payroll.Tests
          int empId = 6;
          AddSalariedEmployeeUseCase t = new AddSalariedEmployeeUseCase(empId, "Mike", "Home", 3500.00, database);
          t.Execute();
-         ChangeDirectUseCase cddt = new ChangeDirectUseCase(empId, database);
+         ChangeDirectDepositUseCase cddt = new ChangeDirectDepositUseCase(empId, "Halifax", "012345678", database);
          cddt.Execute();
          Employee e = database.GetEmployee(empId);
          Assert.IsNotNull(e);
@@ -154,7 +154,7 @@ namespace Payroll.Tests
          int empId = 7;
          AddSalariedEmployeeUseCase t = new AddSalariedEmployeeUseCase(empId, "Mike", "Home", 3500.00, database);
          t.Execute();
-         new ChangeDirectUseCase(empId, database).Execute();
+         new ChangeDirectDepositUseCase(empId, "Halifax", "012345678", database).Execute();
          ChangeHoldUseCase cht = new ChangeHoldUseCase(empId, database);
          cht.Execute();
          Employee e = database.GetEmployee(empId);
@@ -170,7 +170,7 @@ namespace Payroll.Tests
          int empId = 8;
          AddSalariedEmployeeUseCase t = new AddSalariedEmployeeUseCase(empId, "Mike", "Home", 3500.00, database);
          t.Execute();
-         ChangeMailUseCase cmt = new ChangeMailUseCase(empId, database);
+         ChangeMailUseCase cmt = new ChangeMailUseCase(empId, "34 New Adrress", database);
          cmt.Execute();
          Employee e = database.GetEmployee(empId);
          Assert.IsNotNull(e);

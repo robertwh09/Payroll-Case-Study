@@ -7,20 +7,21 @@ namespace PayrollMySQLDB
    class SaveAffiliationOperation
    {
       private readonly int affiliationId;
-      private readonly Employee employee;
+      private readonly int empId;
+      private readonly double dues;
       private readonly MySqlConnection conn;
       private MySqlCommand insertAffiliationCommand;
 
       public SaveAffiliationOperation(int affiliationId, Employee employee, MySqlConnection conn)
       {
          this.affiliationId = affiliationId;
-         this.employee = employee;
+         this.empId = employee.EmpId;
          this.conn = conn;
       }
 
       public void Execute()
       {
-         insertAffiliationCommand = CreateInsertAffiliationCommand(affiliationId, employee);
+         insertAffiliationCommand = CreateInsertAffiliationCommand(affiliationId, empId);
          MySqlTransaction transaction = conn.BeginTransaction();
          try
          {
@@ -34,12 +35,12 @@ namespace PayrollMySQLDB
          }
       }
 
-      private MySqlCommand CreateInsertAffiliationCommand(int affiliationId, Employee employee)
+      private MySqlCommand CreateInsertAffiliationCommand(int affiliationId, int empId)
       {
          string sql = "insert into EmployeeAffiliation values (@EmpId, @Affiliation)";
          MySqlCommand command = new MySqlCommand(sql);
          command.Parameters.AddWithValue("@Affiliation", affiliationId);
-         command.Parameters.AddWithValue("@EmpId", employee.EmpId);
+         command.Parameters.AddWithValue("@EmpId", empId);
          return command;
       }
       private void ExecuteCommand(MySqlCommand command, MySqlTransaction transaction)

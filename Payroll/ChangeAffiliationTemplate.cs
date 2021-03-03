@@ -10,6 +10,7 @@
          RecordMembership(e);
          Affiliation affiliation = Affiliation;
          e.Affiliation = affiliation;
+         database.SaveEmployee(e);
       }
       protected abstract Affiliation Affiliation { get; }
       protected abstract void RecordMembership(Employee e);

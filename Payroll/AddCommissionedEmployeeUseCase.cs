@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Payroll
 {
-   public class AddCommissionedEmployeeUseCase : AddEmployeeUseCase
+   public class AddCommissionedEmployeeUseCase : AddEmployeeTemplate
    {
       private readonly double baseSalary;
       private readonly double commissionRate;
-      public AddCommissionedEmployeeUseCase(int empid, string name, string address, double baseSalary, double commissionRate, InMemoryPayrollDatabase database) 
+      public AddCommissionedEmployeeUseCase(int empid, string name, string address, double baseSalary, double commissionRate, PayrollDatabase database) 
          : base(empid, name, address, database)
       {
          this.baseSalary = baseSalary;

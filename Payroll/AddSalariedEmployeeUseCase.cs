@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Payroll
 {
-   public class AddSalariedEmployeeUseCase : AddEmployeeUseCase
+   public class AddSalariedEmployeeUseCase : AddEmployeeTemplate
    {
       private readonly double salary;
       public AddSalariedEmployeeUseCase(int id, string name, string address, double salary, PayrollDatabase database)

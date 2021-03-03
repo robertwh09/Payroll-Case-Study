@@ -9,7 +9,7 @@ namespace Payroll.Tests
    [TestClass()]
    public class SalesReceiptUseCaseTests
    {
-      private InMemoryPayrollDatabase database = new InMemoryPayrollDatabase();
+      private PayrollDatabase database = new InMemoryPayrollDatabase();
       [TestMethod()]
       public void SalesReceiptUseCaseTest()
       {

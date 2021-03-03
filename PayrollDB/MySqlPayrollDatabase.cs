@@ -47,9 +47,9 @@ namespace PayrollMySQLDB
          throw new System.NotImplementedException();
       }
 
-      public Employee GetEmployee(int id)
+      public Employee GetEmployee(int empId)
       {
-         LoadEmployeeOperation loadOperation = new LoadEmployeeOperation(id, conn);
+         LoadEmployeeOperation loadOperation = new LoadEmployeeOperation(empId, conn);
          loadOperation.Execute();
          return loadOperation.Employee;
       }
@@ -58,7 +58,7 @@ namespace PayrollMySQLDB
       {
          try
          {
-            //TODO why are we using the Command pattern here?
+            //TODO3 why are we using the Command pattern here?
             GetEmpIDFromAffiliateIDOperation loadOperation = new GetEmpIDFromAffiliateIDOperation(affId, conn);
             loadOperation.Execute();
             return GetEmployee(loadOperation.EmpId);
@@ -77,29 +77,23 @@ namespace PayrollMySQLDB
 
       public void AddTimecard(int empId, Timecard timecard)
       {
-         //TODO need to add support to Add Timecards
+         //TODO1 need to add support to Add Timecards
          throw new System.NotImplementedException();
       }
       public Timecard GetTimecard(int empId, DateTime date)
       {
-         //TODO need to add support to Get Timecards by Date
+         //TODO1 need to add support to Get Timecards by Date
          throw new System.NotImplementedException();
       }
       public IList GetTimecard(int empId, DateTime startDate, DateTime endDate)
       {
-         //TODO need to add support to Get Timecards by Date range
+         //TODO1 need to add support to Get Timecards by Date range
          throw new System.NotImplementedException();
       }
       public void RemoveTimecard(int empId, DateTime date)
       {
-         //TODO need to add support to Delete Timecards
+         //TODO3 need to add support to Delete Timecards
          throw new System.NotImplementedException();
-      }
-
-      public void UpdateEmployee(Employee employee)
-      {
-         UpdateEmployeeOperation operation = new UpdateEmployeeOperation(employee, conn);
-         operation.Execute();
       }
    }
 }

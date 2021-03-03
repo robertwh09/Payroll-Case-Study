@@ -10,7 +10,7 @@ namespace Payroll
 		private readonly double saleAmount;
 		private readonly int empId;
 
-		public SalesReceiptUseCase(DateTime time, double saleAmount, int empId, InMemoryPayrollDatabase database) : base (database)
+		public SalesReceiptUseCase(DateTime time, double saleAmount, int empId, PayrollDatabase database) : base (database)
 		{
 			this.date = time;
 			this.saleAmount = saleAmount;

@@ -14,6 +14,7 @@ namespace Payroll
       protected override void Change(Employee e)
       {
          e.Name = newName;
+         database.SaveEmployee(e);
       }
    }
 }

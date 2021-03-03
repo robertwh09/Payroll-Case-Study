@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Payroll
 {
-	public class ChangeHoldUseCase : ChangeMethodUseCase
+	public class ChangeHoldUseCase : ChangeMethodTemplate
 	{
 		public ChangeHoldUseCase(int empId, PayrollDatabase database)
 			: base(empId, database)

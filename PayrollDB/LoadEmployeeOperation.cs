@@ -74,7 +74,7 @@ namespace PayrollMySQLDB
       }
       public static DataRow LoadDataFromCommand(MySqlCommand command)
       {
-         MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+         MySqlDataAdapter adapter = new MySqlDataAdapter(command);//TODO error deleting table
          DataSet dataset = new DataSet();
          adapter.Fill(dataset);
          DataTable table = dataset.Tables["table"];
