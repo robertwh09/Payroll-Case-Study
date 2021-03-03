@@ -146,6 +146,9 @@ namespace PayrollMySQLDB.Tests
          cd.Execute();
          Employee e = database.GetEmployee(empId);
          Assert.IsTrue(e.Method is DirectDepositMethod);
+         DirectDepositMethod dd = e.Method as DirectDepositMethod;
+         Assert.AreEqual("Lloyds", dd.Bank);
+         Assert.AreEqual("0987654321", dd.AccountNumber);
 
          ChangeHoldUseCase ch = new ChangeHoldUseCase(empId, database);
          ch.Execute();
@@ -156,6 +159,8 @@ namespace PayrollMySQLDB.Tests
          cm.Execute();
           e = database.GetEmployee(empId);
          Assert.IsTrue(e.Method is MailMethod);
+         MailMethod mm = e.Method as MailMethod;
+         Assert.AreEqual("23 The Ave.", mm.Address);
       }
 
       [TestMethod]
