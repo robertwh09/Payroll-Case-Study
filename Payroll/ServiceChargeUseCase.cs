@@ -24,8 +24,7 @@ namespace Payroll
             if (e.Affiliation is UnionAffiliation)
                ua = e.Affiliation as UnionAffiliation;
             if (ua != null)
-               ua.AddServiceCharge(
-               new ServiceCharge(time, charge));
+               ua.AddServiceCharge(new ServiceCharge(time, charge));
             else
                throw new InvalidOperationException(
                "Tries to add service charge to union"

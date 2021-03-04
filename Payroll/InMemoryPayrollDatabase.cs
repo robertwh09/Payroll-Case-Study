@@ -7,9 +7,9 @@ namespace Payroll
    public class InMemoryPayrollDatabase : PayrollDatabase
    {     
       private static Hashtable employees = new Hashtable();
-      private static Hashtable unionMembers = new Hashtable();
-      private static Hashtable affiliationDues = new Hashtable();
-      private static Hashtable serviceCharges = new Hashtable();
+      private static Hashtable employeeAffiliations = new Hashtable();
+      //private static Hashtable affiliation = new Hashtable();
+      //private static Hashtable serviceCharges = new Hashtable();
 
       public void SaveEmployee(Employee employee)
       {
@@ -25,20 +25,7 @@ namespace Payroll
       {
          employees.Remove(id);
       }
-      public void AddAffiliateMember(int memberId, Employee employee)
-      {
-         unionMembers[memberId] = employee;
-      }
 
-      public Employee GetAffiliateMember(int memberId)
-      {
-         return unionMembers[memberId] as Employee;
-      }
-
-      public void RemoveAffiliateMember(int memberId)
-      {
-         unionMembers.Remove(memberId);
-      }
 
       public ArrayList GetAllEmployeeIds()
       {
@@ -61,8 +48,36 @@ namespace Payroll
       }
       public void Clear()
       {
+         //serviceCharges.Clear();
+         //affiliation.Clear();
+         employeeAffiliations.Clear();
          employees.Clear();
-         unionMembers.Clear();
       }
+
+      public void AddAffiliateMember(int memberId, Employee e)
+      {
+         employeeAffiliations[memberId] = e;
+      }
+
+      public Employee GetAffiliateMember(int memberId)
+      {
+         return employeeAffiliations[memberId] as Employee;
+      }
+
+      public void RemoveAffiliateMember(int memberId)
+      {
+         employeeAffiliations.Remove(memberId);
+      }
+      void PayrollDatabase.AddAffiliateServiceCharge(int affId, DateTime date, double serviceCharge)
+      {
+
+         throw new NotImplementedException();
+      }
+
+      ArrayList PayrollDatabase.GetAffiliateServiceCharge(int affId, DateTime startDate, DateTime endDate)
+      {
+         throw new NotImplementedException();
+      }
+
    }
 }

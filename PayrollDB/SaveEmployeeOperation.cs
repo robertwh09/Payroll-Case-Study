@@ -46,6 +46,11 @@ namespace PayrollMySQLDB
             ExecuteNonQueryCommand(saveNewPaymentMethodCommand, transaction);
             ExecuteNonQueryCommand(deleteExistingSalaryClassificationCommand, transaction);
             ExecuteNonQueryCommand(saveNewSalaryClassificationCommand, transaction);
+
+            //TODO need to save timecards within this transaction
+            //TODO need to save affiliations
+            //TODO need to save Paycheck address
+
             transaction.Commit();
          }
          catch (MySqlException e)
@@ -271,6 +276,7 @@ namespace PayrollMySQLDB
          string sql = "update HourlyClassification set HourlyRate=@HourlyRate, EmpId=@EmpId where EmpID=@EmpId";
          MySqlCommand command = LoadHourlySQLParameters(classification, sql);
          
+         //TODO1 need to place this with the transaction
          SaveTimeCardsOperation stc = new SaveTimeCardsOperation(employeeToSave, conn);
          stc.Execute();
 

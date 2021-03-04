@@ -34,6 +34,7 @@ namespace PayrollMySQLDB
 
       public void DeleteEmployee(int id)
       {
+         //TODO1 neeed to delete all related records and then delete employee, CASCADE?
          throw new System.NotImplementedException();
       }
 
@@ -63,9 +64,10 @@ namespace PayrollMySQLDB
             loadOperation.Execute();
             return GetEmployee(loadOperation.EmpId);
          }
-         catch (Exception)
+         catch (Exception e)
          {
-            return null;
+            throw (e);
+           // return null;
          }
       }
 
@@ -74,5 +76,16 @@ namespace PayrollMySQLDB
          RemoveAffiliateMemberOperation removeOperation = new RemoveAffiliateMemberOperation(memberId, conn);
          removeOperation.Execute();
       }
+
+      void PayrollDatabase.AddAffiliateServiceCharge(int affId, DateTime date, double serviceCharge)
+      {
+         throw new NotImplementedException();
+      }
+
+      ArrayList PayrollDatabase.GetAffiliateServiceCharge(int affId, DateTime startDate, DateTime endDate)
+      {
+         throw new NotImplementedException();
+      }
+
    }
 }

@@ -38,11 +38,13 @@ namespace Payroll
 
       public void AddTimeCard(TimeCard timeCard)
       {
+         //TODO save to database here
          timeCards[timeCard.Date] = timeCard;
       }
 
       public TimeCard GetTimeCard(DateTime dateTime)
       {
+         //TODO retrieve from database here
          return timeCards[dateTime.Date] as TimeCard;
       }
       public Hashtable GetAllTimeCards()

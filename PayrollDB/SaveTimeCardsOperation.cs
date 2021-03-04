@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using Payroll;
+using System;
 using System.Collections;
 
 namespace PayrollMySQLDB
@@ -12,15 +13,23 @@ namespace PayrollMySQLDB
       private MySqlCommand deleteTimecardCommand;
       public SaveTimeCardsOperation(Employee employee, MySqlConnection conn)
       {
-         this.employee = employee;
-         this.conn = conn;
+         if (employee.Classification is HourlyClassification)
+         {
+            this.employee = employee;
+            this.conn = conn;
+         }
+         else
+         {
+            throw (new Exception("Employee must be of type HourlyClassification"));
+         }
       }
       public void Execute()
       {
+
          HourlyClassification hc = employee.Classification as HourlyClassification;
          Hashtable timecards = hc.GetAllTimeCards();
 
-         deleteTimecardCommand = CreateDeleteTimecardCommand(employee.EmpId);
+         deleteTimecardCommand = CreateDeleteTimecardCommand();
 
          MySqlTransaction transaction = conn.BeginTransaction();
          try
@@ -62,22 +71,12 @@ namespace PayrollMySQLDB
          return command;
       }
 
-      private MySqlCommand CreateDeleteTimecardCommand(int EmpId)
+      private MySqlCommand CreateDeleteTimecardCommand()
       {
          string sql = "delete from Timecard where EmpId=@EmpId";
          MySqlCommand command = new MySqlCommand(sql);
          command.Parameters.AddWithValue("@EmpId", employee.EmpId);
          return command;
-      }
-
-      private void ExecuteCommand(MySqlCommand command, MySqlTransaction transaction)
-      {
-         if (command != null)
-         {
-            command.Connection = conn;
-            command.Transaction = transaction;
-            command.ExecuteNonQuery();
-         }
       }
    }
 }

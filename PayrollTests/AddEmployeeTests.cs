@@ -8,7 +8,6 @@ namespace Payroll.Tests
    public class AddEmployeeTests
    {
       private PayrollDatabase database;
-      private MySqlConnection conn;
 
       [TestInitialize]
       public void TestInitialize()

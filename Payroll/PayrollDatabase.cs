@@ -16,10 +16,9 @@ namespace Payroll
 		void RemoveAffiliateMember(int affilationId);
 
 		//TODO1 need to add Service Charges
-		/*
 		void AddAffiliateServiceCharge(int affId, DateTime date, double serviceCharge);
-		IList GetAffiliateServiceCharge(int affId, DateTime startDate, DateTime endDate);
-		*/
+		ArrayList GetAffiliateServiceCharge(int affId, DateTime startDate, DateTime endDate);
+		
 
 		//TODO1 need to add Sales Receipts
 		/*
