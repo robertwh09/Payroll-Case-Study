@@ -59,7 +59,7 @@ namespace Payroll.Tests
          empId, "Bill", "Home", 15.25, database);
          t.Execute();
          DateTime payDate = new DateTime(2001, 11, 9); // Friday
-         TimeCardUseCase tc = new TimeCardUseCase(payDate, 2.0, empId, database);
+         AddTimeCardUseCase tc = new AddTimeCardUseCase(payDate, 2.0, empId, database);
          tc.Execute();
          PaydayUseCase pt = new PaydayUseCase(payDate, database);
          pt.Execute();
@@ -73,7 +73,7 @@ namespace Payroll.Tests
          empId, "Bill", "Home", 15.25, database);
          t.Execute();
          DateTime payDate = new DateTime(2001, 11, 9); // Friday
-         TimeCardUseCase tc = new TimeCardUseCase(payDate, 9.0, empId, database);
+         AddTimeCardUseCase tc = new AddTimeCardUseCase(payDate, 9.0, empId, database);
          tc.Execute();
          PaydayUseCase pt = new PaydayUseCase(payDate, database);
          pt.Execute();
@@ -89,9 +89,9 @@ namespace Payroll.Tests
          empId, "Bill", "Home", 15.25, database);
          t.Execute();
          DateTime payDate = new DateTime(2001, 11, 9); // Friday
-         TimeCardUseCase tc = new TimeCardUseCase(payDate, 2.0, empId, database);
+         AddTimeCardUseCase tc = new AddTimeCardUseCase(payDate, 2.0, empId, database);
          tc.Execute();
-         TimeCardUseCase tc2 = new TimeCardUseCase(payDate.AddDays(-1), 5.0, empId, database);
+         AddTimeCardUseCase tc2 = new AddTimeCardUseCase(payDate.AddDays(-1), 5.0, empId, database);
          tc2.Execute();
          PaydayUseCase pt = new PaydayUseCase(payDate, database);
          pt.Execute();
@@ -106,7 +106,7 @@ namespace Payroll.Tests
          empId, "Bill", "Home", 15.25, database);
          t.Execute();
          DateTime payDate = new DateTime(2001, 11, 8); // Thursday
-         TimeCardUseCase tc = new TimeCardUseCase(payDate, 9.0, empId, database);
+         AddTimeCardUseCase tc = new AddTimeCardUseCase(payDate, 9.0, empId, database);
          tc.Execute();
          PaydayUseCase pt = new PaydayUseCase(payDate, database);
          pt.Execute();
@@ -122,9 +122,9 @@ namespace Payroll.Tests
          t.Execute();
          DateTime payDate = new DateTime(2001, 11, 9); // Friday
          DateTime dateInPreviousPayPeriod = new DateTime(2001, 11, 2);
-         TimeCardUseCase tc = new TimeCardUseCase(payDate, 2.0, empId, database);
+         AddTimeCardUseCase tc = new AddTimeCardUseCase(payDate, 2.0, empId, database);
          tc.Execute();
-         TimeCardUseCase tc2 = new TimeCardUseCase(
+         AddTimeCardUseCase tc2 = new AddTimeCardUseCase(
          dateInPreviousPayPeriod, 5.0, empId, database);
          tc2.Execute();
          PaydayUseCase pt = new PaydayUseCase(payDate, database);
@@ -166,7 +166,7 @@ namespace Payroll.Tests
          DateTime payDate = new DateTime(2001, 11, 9);
          ServiceChargeUseCase sct = new ServiceChargeUseCase(memberId, payDate, 19.42, database);
          sct.Execute();
-         TimeCardUseCase tct = new TimeCardUseCase(payDate, 8.0, empId, database);
+         AddTimeCardUseCase tct = new AddTimeCardUseCase(payDate, 8.0, empId, database);
          tct.Execute();
          PaydayUseCase pt = new PaydayUseCase(payDate, database);
          pt.Execute();
@@ -197,7 +197,7 @@ namespace Payroll.Tests
          sctEarly.Execute();
          ServiceChargeUseCase sctLate = new ServiceChargeUseCase(memberId, lateDate, 200.00, database);
          sctLate.Execute();
-         TimeCardUseCase tct = new TimeCardUseCase(payDate, 8.0, empId, database);
+         AddTimeCardUseCase tct = new AddTimeCardUseCase(payDate, 8.0, empId, database);
          tct.Execute();
          PaydayUseCase pt = new PaydayUseCase(payDate, database);
          pt.Execute();

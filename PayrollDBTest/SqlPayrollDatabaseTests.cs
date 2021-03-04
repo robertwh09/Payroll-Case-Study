@@ -338,11 +338,10 @@ namespace PayrollMySQLDB.Tests
       }
 
       [TestMethod]
-      public void AddRemoveUnionMemberOperation()
+      public void AddRemoveAffiliateOperation()
       {
-         int empId = 123;
+         int empId = employee.EmpId;
          int affliationId = 4321;
-         ClearTables();
 
          //Add Affiliation
          database.SaveEmployee(employee);
@@ -356,13 +355,51 @@ namespace PayrollMySQLDB.Tests
          Assert.IsNull(employee);
       }
 
+      [TestMethod]
+      public void AddTimeCard()
+      {
+         AddHourlyEmployeeUseCase ah = new AddHourlyEmployeeUseCase(123, "George", "123 BakerSt.", 10.5, database);
+         ah.Execute();
+        
+         Employee hourlyEemployee = database.GetEmployee(123);
+
+         DateTime date1 = new DateTime(2021, 1, 1);
+         double hours1 = 7.5;
+         TimeCard tc1 = new TimeCard(date1, hours1);
+
+         DateTime date2 = new DateTime(2021, 1, 2);
+         double hours2 = 9.5;
+         TimeCard tc2 = new TimeCard(date2, hours2);
+
+         HourlyClassification hc = hourlyEemployee.Classification as HourlyClassification;
+         hc.AddTimeCard(tc1);
+         hc.AddTimeCard(tc2);
+         SaveEmployeeOperation seo = new SaveEmployeeOperation(hourlyEemployee, conn);
+         seo.Execute();
+
+         hourlyEemployee = database.GetEmployee(123);
+         hc = hourlyEemployee.Classification as HourlyClassification;
+         Assert.AreEqual(date1, hc.GetTimeCard(date1).Date);
+         Assert.AreEqual(hours1, hc.GetTimeCard(date1).Hours);
+         Assert.AreEqual(date2, hc.GetTimeCard(date2).Date);
+         Assert.AreEqual(hours2, hc.GetTimeCard(date2).Hours);
+      }
+
       private void ClearTables()
       {
          ClearTable("SalariedClassification");
          ClearTable("CommissionedClassification");
          ClearTable("HourlyClassification");
+
+         ClearTable("ServiceCharge");
+         ClearTable("Affiliation");
+         ClearTable("EmployeeAffiliation");
+
          ClearTable("PaycheckAddress");
          ClearTable("DirectDepositAccount");
+
+         ClearTable("Timecard");
+
          ClearTable("Employee");
       }
       private void ClearTable(string tableName)

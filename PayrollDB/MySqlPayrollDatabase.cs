@@ -28,7 +28,7 @@ namespace PayrollMySQLDB
 
       public void AddAffiliateMember(int memberId, Employee employee)
       {
-         SaveAffiliationOperation operation = new SaveAffiliationOperation(memberId, employee, conn);
+         SaveAffiliationsOperation operation = new SaveAffiliationsOperation(memberId, employee, conn);
          operation.Execute();
       }
 
@@ -73,27 +73,6 @@ namespace PayrollMySQLDB
       {
          RemoveAffiliateMemberOperation removeOperation = new RemoveAffiliateMemberOperation(memberId, conn);
          removeOperation.Execute();
-      }
-
-      public void AddTimecard(int empId, Timecard timecard)
-      {
-         //TODO1 need to add support to Add Timecards
-         throw new System.NotImplementedException();
-      }
-      public Timecard GetTimecard(int empId, DateTime date)
-      {
-         //TODO1 need to add support to Get Timecards by Date
-         throw new System.NotImplementedException();
-      }
-      public IList GetTimecard(int empId, DateTime startDate, DateTime endDate)
-      {
-         //TODO1 need to add support to Get Timecards by Date range
-         throw new System.NotImplementedException();
-      }
-      public void RemoveTimecard(int empId, DateTime date)
-      {
-         //TODO3 need to add support to Delete Timecards
-         throw new System.NotImplementedException();
       }
    }
 }

@@ -15,12 +15,6 @@ namespace Payroll
 		Employee GetAffiliateMember(int affilationId);
 		void RemoveAffiliateMember(int affilationId);
 
-
-		void AddTimecard(int empId, Timecard timecard);
-		Timecard GetTimecard(int empId, DateTime date);
-		IList GetTimecard(int empId, DateTime startDate, DateTime endDate);
-		void RemoveTimecard(int empId, DateTime date);
-
 		//TODO1 need to add Service Charges
 		/*
 		void AddAffiliateServiceCharge(int affId, DateTime date, double serviceCharge);

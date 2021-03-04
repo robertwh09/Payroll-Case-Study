@@ -4,19 +4,32 @@ using System.Text;
 
 namespace Payroll
 {
-   public class AddTimecardUseCase : UseCase
+   public class AddTimeCardUseCase : UseCase
    {
+      private readonly DateTime date;
+      private readonly double hours;
       private readonly int empId;
-      private readonly Timecard timecard;
-
-      public AddTimecardUseCase(int empId, Timecard timecard, PayrollDatabase database) : base (database)
+      public AddTimeCardUseCase(DateTime date, double hours, int empId, PayrollDatabase database) : base (database)
       {
+         this.date = date;
+         this.hours = hours;
          this.empId = empId;
-         this.timecard = timecard;
       }
       public override void Execute()
       {
-         database.AddTimecard(empId, timecard);
+         Employee e = database.GetEmployee(empId);
+         if (e != null)
+         {
+            HourlyClassification hc = e.Classification as HourlyClassification;
+            if (hc != null)
+               hc.AddTimeCard(new TimeCard(date, hours));
+            else
+               throw new InvalidOperationException(
+               "Tried to add timecard to" +
+               "non-hourly employee");
+         }
+         else
+            throw new InvalidOperationException("No such employee.");
       }
    }
 }

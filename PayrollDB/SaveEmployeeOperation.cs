@@ -3,7 +3,7 @@ using Payroll;
 
 namespace PayrollMySQLDB
 {
-   class SaveEmployeeOperation
+   public class SaveEmployeeOperation
    {
       private readonly MySqlConnection conn;
       private string paymentMethodCode;
@@ -90,13 +90,14 @@ namespace PayrollMySQLDB
       //#####################################################################
       private void PrepareToInsertEmployee()
       {
+         //TODO add field names instead of relying on column position
          string sql = "insert into Employee values (@EmpId, @Name, @Address, @ScheduleType, @PaymentMethodType, @PaymentClassificationType)";
 
          LoadEmployeeSQLParameters(sql);
       }
       private void PrepareToUpdateEmployee()
       {
-         string sql = "update Employee set EmpID = @EmpId, Name=@Name, Address=@Address, ScheduleType=@ScheduleType," +
+         string sql = "update Employee set EmpID=@EmpId, Name=@Name, Address=@Address, ScheduleType=@ScheduleType," +
             "PaymentMethodType=@PaymentMethodType, PaymentClassificationType=@PaymentClassificationType where EmpID=@EmpId";
 
          LoadEmployeeSQLParameters(sql);
@@ -207,21 +208,21 @@ namespace PayrollMySQLDB
             salaryClassificationCode = "unknown";
       }
       private MySqlCommand CreateInsertSalariedClassificationCommand(SalariedClassification classification)
-      {
+      {//TODO add field names instead of relying on column position
          string sql = "insert into SalariedClassification values (@Salary, @EmpId)";
          MySqlCommand command = LoadSalariedSQLParameters(classification, sql);
          return command;
       }
 
       private MySqlCommand CreateInsertCommissionClassificationCommand(CommissionedClassification classification)
-      {
+      {//TODO add field names instead of relying on column position
          string sql = "insert into CommissionedClassification values (@Salary, @Commission, @EmpId)";
          MySqlCommand command = LoadCommissionedSQLParameters(classification, sql);
          return command;
       }
 
       private MySqlCommand CreateInsertHourlyClassificationCommand(HourlyClassification classification)
-      {
+      {//TODO add field names instead of relying on column position
          string sql = "insert into HourlyClassification values (@HourlyRate, @EmpId)";
          MySqlCommand command = LoadHourlySQLParameters(classification, sql);
          return command;
@@ -260,15 +261,19 @@ namespace PayrollMySQLDB
       }
       private MySqlCommand CreateUpdateSalariedClassificationCommand(SalariedClassification classification)
       {
-         string sql = "update SalariedClassification set Salary=@Salary, EmpId=@EmpId where EmpID = @EmpId";
+         string sql = "update SalariedClassification set Salary=@Salary, EmpId=@EmpId where EmpID=@EmpId";
          MySqlCommand command = LoadSalariedSQLParameters(classification, sql);
          return command;
       }
 
       private MySqlCommand CreateUpdateHourlyClassificationCommand(HourlyClassification classification)
       {
-         string sql = "update SalariedClassification set HourlyRate=@HourlyRate, EmpId=@EmpId where EmpID = @EmpId";
+         string sql = "update HourlyClassification set HourlyRate=@HourlyRate, EmpId=@EmpId where EmpID=@EmpId";
          MySqlCommand command = LoadHourlySQLParameters(classification, sql);
+         
+         SaveTimeCardsOperation stc = new SaveTimeCardsOperation(employeeToSave, conn);
+         stc.Execute();
+
          return command;
       }
 
@@ -348,7 +353,7 @@ namespace PayrollMySQLDB
             paymentMethodCode = "unknown";
       }
       private MySqlCommand CreateInsertMailMethodCommand(MailMethod mailMethod)
-      {
+      {//TODO add field names instead of relying on column position
          string sql = "insert into PaycheckAddress values (@Address, @EmpId)";
          MySqlCommand command = new MySqlCommand(sql);
          command.Parameters.AddWithValue("@Address", mailMethod.Address);
@@ -357,7 +362,7 @@ namespace PayrollMySQLDB
       }
 
       private MySqlCommand CreateInsertDirectDepositCommand(DirectDepositMethod ddMethod)
-      {
+      {//TODO add field names instead of relying on column position
          string sql = "insert into directdepositaccount values (@Bank, @Account, @EmpId)";
          MySqlCommand command = new MySqlCommand(sql, conn);
          command.Parameters.AddWithValue("@Bank", ddMethod.Bank);
@@ -389,7 +394,7 @@ namespace PayrollMySQLDB
       }
 
       private MySqlCommand CreateUpdateMailMethodCommand(MailMethod mailMethod)
-      {
+      {//TODO add field names instead of relying on column position
          string sql = "update PaycheckAddress set Address=@Address where EmpID=@EmpId";
          MySqlCommand command = new MySqlCommand(sql);
          command.Parameters.AddWithValue("@Address", mailMethod.Address);

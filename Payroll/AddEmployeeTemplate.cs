@@ -35,9 +35,6 @@ namespace Payroll
          e.Schedule = ps;
          e.Method = pm;
          database.SaveEmployee(e);
-         //TODO1 review how single entities are added to database with child records.  Only main entity is saved.  Seperate methods/classes are used to save/change/delete linked tables.
-         //in memory employee may only have a subset of relational data tables loaded for specifc problem being worked on at the moment.  such as timecards for the month
-         //review what happens if employee type is changed and therefore what is link to old timecards for emoployee moved to salaried
       }
    }
 }

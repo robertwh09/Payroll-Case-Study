@@ -81,6 +81,14 @@ namespace PayrollMySQLDB
 		{
 			double rate = Convert.ToDouble(row["HourlyRate"]);
 			classification = new HourlyClassification(rate);
+			HourlyClassification hourlyClassification = classification as HourlyClassification;
+
+			//if we have a connection to the db then go there and load the timcards for this employee
+         if (connection != null)
+         {
+				LoadTimeCardsOperation loadTimeCards = new LoadTimeCardsOperation(employee.EmpId, hourlyClassification, connection);
+				loadTimeCards.Execute();
+			}
 		}
 
 		private void CreateSalaried(DataRow row)

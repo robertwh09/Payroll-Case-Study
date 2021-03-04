@@ -8,4 +8,6 @@ https://github.com/martinrist/ppp-payroll-case-study
 https://github.com/kkisiele/payroll
 https://github.com/haridaniel/PayrollCaseStudy
 
+
 http://cleancodejava.com/uncle-bob-payroll-case-study-full-implementation/
+https://alistair.cockburn.us/hexagonal-architecture/

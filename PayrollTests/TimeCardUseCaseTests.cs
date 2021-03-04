@@ -1,39 +1,45 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections;
 
 namespace Payroll.Tests
 {
    [TestClass()]
    public class TimeCardUseCaseTests
    {
-      private PayrollDatabase database = new InMemoryPayrollDatabase();
-      [TestMethod]
-      public void AddTimecardTest()
+      private PayrollDatabase database;
+      private int empId;
+
+      [TestInitialize]
+      public void TestInitialize()
       {
-         int empId = 1;
-         double salary = 1000.0;
-         AddSalariedEmployeeUseCase t = new AddSalariedEmployeeUseCase(empId, "Bob", "Home1", salary, database);
+         this.database = new InMemoryPayrollDatabase();
+         this.empId = 123;
+
+         AddHourlyEmployeeUseCase t = new AddHourlyEmployeeUseCase(empId, "Bob", "Home1",10.5, database);
          t.Execute();
-
-         DateTime date = new DateTime(2021, 1, 3);
-         Timecard tc = new Timecard(date, 10.5);
-         AddTimecardUseCase tcu = new AddTimecardUseCase(empId, tc, database);
-         tcu.Execute();
-
-         Assert.AreEqual(tc, database.GetTimecard(empId, date));
       }
+      
       [TestMethod]
-      public void RemoveTimecardTest()
+      public void AddTimecardUseCaseTest()
       {
-      }
-      [TestMethod]
-      public void ChangeTimecardTest()
-      {
-      }
+         DateTime date = new DateTime(2021, 1, 1);
+         double hours = 7.5;
+         AddTimeCardUseCase atc = new AddTimeCardUseCase(date, hours, empId, database);
+         atc.Execute();
 
-      [TestMethod]
-      public void GetTimecardDateRangeTest()
-      {
+         Employee employee = database.GetEmployee(empId);
+         HourlyClassification hc = employee.Classification as HourlyClassification;
+
+         Assert.AreEqual(hours, hc.GetTimeCard(date).Hours);
+         Assert.AreEqual(date, hc.GetTimeCard(date).Date);
+
+         hours = 8.5;
+         atc = new AddTimeCardUseCase(date, hours, empId, database);
+         atc.Execute();
+
+         Assert.AreEqual(hours, hc.GetTimeCard(date).Hours);
+         Assert.AreEqual(date, hc.GetTimeCard(date).Date);
       }
    }
 }

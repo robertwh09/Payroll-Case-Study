@@ -1,23 +1,25 @@
 ﻿using MySql.Data.MySqlClient;
 using Payroll;
 
-namespace PayrollMySQLDB
+namespace PayrollMySQLDB.Tests
 {
-   public class SaveTimecardOperation
+   class SaveTimeCardOperation
    {
-      private readonly Timecard timeCard;
-      private readonly Employee employee;
+      private readonly TimeCard timecard;
+      private readonly int empId;
       private readonly MySqlConnection conn;
       private MySqlCommand insertTimecardCommand;
-      public SaveTimecardOperation(Timecard timeCard, Employee employee, MySqlConnection conn)
+
+      public SaveTimeCardOperation(TimeCard timecard, Employee employee, MySqlConnection conn)
       {
-         this.timeCard = timeCard;
-         this.employee = employee;
+         this.timecard = timecard;
+         this.empId = employee.EmpId;
          this.conn = conn;
       }
+
       public void Execute()
       {
-         insertTimecardCommand = CreateInsertTimecardCommand(timeCard, employee);
+         insertTimecardCommand = CreateInsertTimeCardCommand(timecard, empId);
          MySqlTransaction transaction = conn.BeginTransaction();
          try
          {
@@ -31,13 +33,13 @@ namespace PayrollMySQLDB
          }
       }
 
-      private MySqlCommand CreateInsertTimecardCommand(Timecard timecard, Employee employee)
+      private MySqlCommand CreateInsertTimeCardCommand(TimeCard timecard, int empId)
       {
-         string sql = "insert into Timecard values (@[date], @Hours, @EmpId)";
+         string sql = "insert into TimeCard values (@[date], @Hours, @EmpId)";
          MySqlCommand command = new MySqlCommand(sql);
-         command.Parameters.AddWithValue("@[date]", timeCard.Date);
-         command.Parameters.AddWithValue("@Hours", timeCard.Hours);
-         command.Parameters.AddWithValue("@EmpId", employee.EmpId);
+         command.Parameters.AddWithValue("@[date]", timecard.Date);
+         command.Parameters.AddWithValue("@Hours", timecard.Hours);
+         command.Parameters.AddWithValue("@EmpId", empId);
          return command;
       }
       private void ExecuteCommand(MySqlCommand command, MySqlTransaction transaction)

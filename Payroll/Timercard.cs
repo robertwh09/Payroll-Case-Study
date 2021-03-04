@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Payroll
 {
-   public class Timecard
+   public class TimeCard
    {
       private readonly DateTime date;
       private readonly double hours;
-      public Timecard(DateTime date, double hours)
+      public TimeCard(DateTime date, double hours)
       {
          this.date = date;
          this.hours = hours;

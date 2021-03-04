@@ -4,7 +4,7 @@ using Payroll;
 
 namespace PayrollMySQLDB
 {
-   class SaveAffiliationOperation
+   class SaveAffiliationsOperation
    {
       private readonly int affiliationId;
       private readonly int empId;
@@ -12,7 +12,7 @@ namespace PayrollMySQLDB
       private readonly MySqlConnection conn;
       private MySqlCommand insertAffiliationCommand;
 
-      public SaveAffiliationOperation(int affiliationId, Employee employee, MySqlConnection conn)
+      public SaveAffiliationsOperation(int affiliationId, Employee employee, MySqlConnection conn)
       {
          this.affiliationId = affiliationId;
          this.empId = employee.EmpId;
@@ -21,7 +21,7 @@ namespace PayrollMySQLDB
 
       public void Execute()
       {
-         insertAffiliationCommand = CreateInsertAffiliationCommand(affiliationId, empId);
+         insertAffiliationCommand = CreateInsertAffiliationCommand();
          MySqlTransaction transaction = conn.BeginTransaction();
          try
          {
@@ -35,11 +35,12 @@ namespace PayrollMySQLDB
          }
       }
 
-      private MySqlCommand CreateInsertAffiliationCommand(int affiliationId, int empId)
+      //TODO1 need to add Affiliation and EmployeeAffilliation at the same time.  Review structure
+      private MySqlCommand CreateInsertAffiliationCommand()
       {
-         string sql = "insert into EmployeeAffiliation values (@EmpId, @Affiliation)";
+         string sql = "insert into EmployeeAffiliation(EmpId, AffiliationId) values (@EmpId, @AffiliationId)";
          MySqlCommand command = new MySqlCommand(sql);
-         command.Parameters.AddWithValue("@Affiliation", affiliationId);
+         command.Parameters.AddWithValue("@AffiliationId", affiliationId);
          command.Parameters.AddWithValue("@EmpId", empId);
          return command;
       }

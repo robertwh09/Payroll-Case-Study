@@ -7,7 +7,7 @@ namespace Payroll
    public class HourlyClassification : PaymentClassification
    {
       private double hourlyRate;
-      private System.Collections.Hashtable timeCards = new Hashtable();
+      private Hashtable timeCards = new Hashtable();
 
       public HourlyClassification(double hourlyRate)
       {
@@ -19,7 +19,7 @@ namespace Payroll
       public override double CalculatePay(Paycheck paycheck)
       {
          double totalPay = 0.0;
-         foreach (Timecard timeCard in timeCards.Values)
+         foreach (TimeCard timeCard in timeCards.Values)
          {
             if (DateUtil.IsInPayPeriod(timeCard.Date,
                paycheck.PayPeriodStartDate,
@@ -29,21 +29,25 @@ namespace Payroll
          return totalPay;
       }
 
-      private double CalculatePayForTimeCard(Timecard card)
+      private double CalculatePayForTimeCard(TimeCard card)
       {
          double overtimeHours = Math.Max(0.0, card.Hours - 8);
          double normalHours = card.Hours - overtimeHours;
          return hourlyRate * normalHours + hourlyRate * 1.5 * overtimeHours;
       }
 
-      internal void AddTimeCard(Timecard timeCard)
+      public void AddTimeCard(TimeCard timeCard)
       {
          timeCards[timeCard.Date] = timeCard;
       }
 
-      public Timecard GetTimeCard(DateTime dateTime)
+      public TimeCard GetTimeCard(DateTime dateTime)
       {
-         return timeCards[dateTime.Date] as Timecard;
+         return timeCards[dateTime.Date] as TimeCard;
+      }
+      public Hashtable GetAllTimeCards()
+      {
+         return timeCards;
       }
       public override string ToString()
       {
