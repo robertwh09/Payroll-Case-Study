@@ -43,6 +43,7 @@ namespace PayrollMySQLDB.Tests
       [TestCleanup]
       public void TestCleanup()
       {
+         ClearTables();
          conn.Close();
       }
 
@@ -350,18 +351,18 @@ namespace PayrollMySQLDB.Tests
          Assert.AreEqual(empId, employee.EmpId);
 
          //Remove Affiliation
-         database.RemoveAffiliateMember(affliationId);
+         database.DeleteAffiliateMember(affliationId);
          employee = database.GetAffiliateMember(affliationId);
          Assert.IsNull(employee);
       }
 
       [TestMethod]
-      public void AddTimeCard()
+      public void AddChangeTimeCard()
       {
          AddHourlyEmployeeUseCase ah = new AddHourlyEmployeeUseCase(123, "George", "123 BakerSt.", 10.5, database);
          ah.Execute();
         
-         Employee hourlyEemployee = database.GetEmployee(123);
+         Employee hourlyEmployee = database.GetEmployee(123);
 
          DateTime date1 = new DateTime(2021, 1, 1);
          double hours1 = 7.5;
@@ -371,19 +372,55 @@ namespace PayrollMySQLDB.Tests
          double hours2 = 9.5;
          TimeCard tc2 = new TimeCard(date2, hours2);
 
-         HourlyClassification hc = hourlyEemployee.Classification as HourlyClassification;
-         hc.AddTimeCard(tc1);
-         hc.AddTimeCard(tc2);
-         SaveEmployeeOperation seo = new SaveEmployeeOperation(hourlyEemployee, conn);
+         HourlyClassification hc = hourlyEmployee.Classification as HourlyClassification;
+         hc.AddChangeTimeCard(123, date1, hours1, database);
+         hc.AddChangeTimeCard(123, date2, hours2, database);
+         hc.AddChangeTimeCard(123, date2, hours2, database);
+         SaveEmployeeOperation seo = new SaveEmployeeOperation(hourlyEmployee, conn);
          seo.Execute();
 
-         hourlyEemployee = database.GetEmployee(123);
-         hc = hourlyEemployee.Classification as HourlyClassification;
+         hourlyEmployee = database.GetEmployee(123);
+         hc = hourlyEmployee.Classification as HourlyClassification;
          Assert.AreEqual(date1, hc.GetTimeCard(date1).Date);
          Assert.AreEqual(hours1, hc.GetTimeCard(date1).Hours);
          Assert.AreEqual(date2, hc.GetTimeCard(date2).Date);
          Assert.AreEqual(hours2, hc.GetTimeCard(date2).Hours);
+
+         hourlyEmployee = database.GetEmployee(123);
+         hc = hourlyEmployee.Classification as HourlyClassification;
+         double hours3 = 10.5;
+         hc.AddChangeTimeCard(date2, hours3);
+         Assert.AreEqual(date2, hc.GetTimeCard(date2).Date);
+         Assert.AreEqual(hours3, hc.GetTimeCard(date2).Hours);
       }
+
+      [TestMethod]
+      public void DeleteTimeCard()
+      {
+         AddHourlyEmployeeUseCase ah = new AddHourlyEmployeeUseCase(123, "George", "123 BakerSt.", 10.5, database);
+         ah.Execute();
+
+         Employee hourlyEmployee = database.GetEmployee(123);
+
+         DateTime date1 = new DateTime(2021, 1, 1);
+         double hours1 = 7.5;
+         TimeCard tc1 = new TimeCard(date1, hours1);
+
+         HourlyClassification hc = hourlyEmployee.Classification as HourlyClassification;
+         hc.AddChangeTimeCard(123, date1, hours1, database);
+         SaveEmployeeOperation seo = new SaveEmployeeOperation(hourlyEmployee, conn);
+         seo.Execute();
+
+         hourlyEmployee = database.GetEmployee(123);
+         hc = hourlyEmployee.Classification as HourlyClassification;
+         Assert.AreEqual(date1, hc.GetTimeCard(date1).Date);
+         Assert.AreEqual(hours1, hc.GetTimeCard(date1).Hours);
+
+         hc.DeleteTimeCard(123, date1, database);
+
+         Assert.IsNull(hc.GetTimeCard(date1));
+      }
+
 
       private void ClearTables()
       {

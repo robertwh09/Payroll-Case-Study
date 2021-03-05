@@ -8,7 +8,8 @@ namespace Payroll
    {     
       private static Hashtable employees = new Hashtable();
       private static Hashtable employeeAffiliations = new Hashtable();
-      //private static Hashtable affiliation = new Hashtable();
+      private Hashtable timeCards = new Hashtable();
+      private static Hashtable affiliation = new Hashtable();
       //private static Hashtable serviceCharges = new Hashtable();
 
       public void SaveEmployee(Employee employee)
@@ -49,7 +50,7 @@ namespace Payroll
       public void Clear()
       {
          //serviceCharges.Clear();
-         //affiliation.Clear();
+         affiliation.Clear();
          employeeAffiliations.Clear();
          employees.Clear();
       }
@@ -64,20 +65,40 @@ namespace Payroll
          return employeeAffiliations[memberId] as Employee;
       }
 
-      public void RemoveAffiliateMember(int memberId)
+      public void DeleteAffiliateMember(int memberId)
       {
          employeeAffiliations.Remove(memberId);
       }
-      void PayrollDatabase.AddAffiliateServiceCharge(int affId, DateTime date, double serviceCharge)
+      public void AddAffiliateServiceCharge(int affId, DateTime date, double serviceCharge)
       {
 
          throw new NotImplementedException();
       }
 
-      ArrayList PayrollDatabase.GetAffiliateServiceCharge(int affId, DateTime startDate, DateTime endDate)
+      public ArrayList GetAffiliateServiceCharge(int affId, DateTime startDate, DateTime endDate)
       {
          throw new NotImplementedException();
       }
 
+      public void AddTimeCard(int empId, TimeCard timecard)
+      {
+         
+         timeCards[new Tuple<int, DateTime>(empId, timecard.Date)] = timecard;
+      }
+
+      public TimeCard GetTimeCard(int empId, DateTime date)
+      {
+         return timeCards[new Tuple<int, DateTime>(empId, date)] as TimeCard;
+      }
+
+      public void DeleteTimeCard(int empId, DateTime date)
+      {
+         Employee employee = GetEmployee(empId);
+         if (employee != null)
+         {
+            HourlyClassification hc = employee.Classification as HourlyClassification;
+            timeCards.Remove(new Tuple<int, DateTime>(empId, date));
+         }
+      }
    }
 }

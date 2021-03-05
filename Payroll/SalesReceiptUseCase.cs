@@ -28,13 +28,10 @@ namespace Payroll
 				if (cc != null)
 					cc.AddSalesReceipt(new SalesReceipt(date, saleAmount));
 				else
-					throw new ApplicationException(
-						"Tried to add sales receipt to" +
-							"non-commissioned employee");
+					throw new ApplicationException("Tried to add sales receipt to non-commissioned employee");
 			}
 			else
-				throw new ApplicationException(
-					"No such employee.");
+				throw new ApplicationException("No such employee.");
 
 		}
 	}

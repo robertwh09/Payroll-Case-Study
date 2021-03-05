@@ -102,6 +102,13 @@ namespace PayrollMySQLDB
 			double baseRate = Convert.ToDouble(row["Salary"]);
 			double commissionRate = Convert.ToDouble(row["Commission"]);
 			classification = new CommissionedClassification(baseRate, commissionRate);
+
+			//if we have a connection to the db then go there and load the sales receipts
+			if (connection != null)
+			{
+				//LoadSalesReceiptsOperation loadSalesReceipts = new LoadSalesReceiptsOperation(employee.EmpId, classification, connection);
+				//loadSalesReceipts.Execute();
+			}
 		}
 	}
 }

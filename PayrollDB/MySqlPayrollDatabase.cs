@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using MySql.Data.MySqlClient;
 using Payroll;
 
 namespace PayrollMySQLDB
@@ -71,21 +72,62 @@ namespace PayrollMySQLDB
          }
       }
 
-      public void RemoveAffiliateMember(int memberId)
+      public void DeleteAffiliateMember(int memberId)
       {
          RemoveAffiliateMemberOperation removeOperation = new RemoveAffiliateMemberOperation(memberId, conn);
          removeOperation.Execute();
       }
 
-      void PayrollDatabase.AddAffiliateServiceCharge(int affId, DateTime date, double serviceCharge)
+      public void AddAffiliateServiceCharge(int affId, DateTime date, double serviceCharge)
       {
          throw new NotImplementedException();
       }
 
-      ArrayList PayrollDatabase.GetAffiliateServiceCharge(int affId, DateTime startDate, DateTime endDate)
+      public ArrayList GetAffiliateServiceCharge(int affId, DateTime startDate, DateTime endDate)
       {
          throw new NotImplementedException();
       }
 
+      public void AddTimeCard(int empId, TimeCard timeCard)
+      {
+         Employee employee = GetEmployee(empId);
+         //check to see if timecard already exists in db
+         //TimeCard timeCardDB = GetTimeCard(empId, timeCard.Date);
+
+         if (employee.Classification is HourlyClassification)
+         {
+            SaveTimeCardOperation st = new SaveTimeCardOperation(empId, timeCard, conn);
+            st.Execute();
+         }
+         else if (employee == null)
+         {
+            throw new Exception("Employee not found");
+         }
+         else
+         {
+            throw (new Exception("Employee must be of type HourlyClassification"));
+         }
+
+      }
+
+      public TimeCard GetTimeCard(int empId, DateTime date)
+      {
+         LoadTimeCardOperation tco = new LoadTimeCardOperation(empId, date, conn);
+         return tco.Execute();
+      }
+
+      public void DeleteTimeCard(int empId, DateTime date)
+      {
+         string sql = "DELETE FROM TimeCard WHERE EmpID=@EmpId AND DATE=@Date";
+         MySqlCommand command = new MySqlCommand(sql);
+         command.Parameters.AddWithValue("@Date", date);
+         command.Parameters.AddWithValue("@EmpId", empId);
+
+         if (command != null)
+         {
+            command.Connection = conn;
+            command.ExecuteNonQuery();
+         }
+      }
    }
 }

@@ -21,11 +21,11 @@ namespace Payroll.Tests
       }
       
       [TestMethod]
-      public void AddTimecardUseCaseTest()
+      public void AddChangeTimecardUseCaseTest()
       {
          DateTime date = new DateTime(2021, 1, 1);
          double hours = 7.5;
-         AddTimeCardUseCase atc = new AddTimeCardUseCase(date, hours, empId, database);
+         AddChangeTimeCardUseCase atc = new AddChangeTimeCardUseCase(empId, date, hours, database);
          atc.Execute();
 
          Employee employee = database.GetEmployee(empId);
@@ -35,11 +35,37 @@ namespace Payroll.Tests
          Assert.AreEqual(date, hc.GetTimeCard(date).Date);
 
          hours = 8.5;
-         atc = new AddTimeCardUseCase(date, hours, empId, database);
+         atc = new AddChangeTimeCardUseCase(empId, date, hours, database);
          atc.Execute();
 
          Assert.AreEqual(hours, hc.GetTimeCard(date).Hours);
          Assert.AreEqual(date, hc.GetTimeCard(date).Date);
+      }
+
+      [TestMethod]
+      public void DeleteTimeCardTest ()
+      {
+         DateTime date = new DateTime(2021, 1, 1);
+         double hours = 7.5;
+         AddChangeTimeCardUseCase atc = new AddChangeTimeCardUseCase(empId, date, hours, database);
+         atc.Execute();
+
+         Employee employee = database.GetEmployee(empId);
+         HourlyClassification hc = employee.Classification as HourlyClassification;
+
+         Assert.AreEqual(hours, hc.GetTimeCard(date).Hours);
+         Assert.AreEqual(date, hc.GetTimeCard(date).Date);
+
+         DeleteTimeCardUseCase dtc = new DeleteTimeCardUseCase(empId, date, database);
+         dtc.Execute();
+
+         Assert.IsNull(hc.GetTimeCard(date));
+      }
+
+      [TestMethod]
+      public void ChangeTimeCardTest()
+      {
+
       }
    }
 }

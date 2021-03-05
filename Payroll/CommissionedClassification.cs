@@ -25,6 +25,12 @@ namespace Payroll
          salesReceipts[receipt.Date] = receipt;
       }
 
+      public void AddSalesReceipt(SalesReceipt receipt, PayrollDatabase database)
+      {
+         //TODO need to add persistance here
+         AddSalesReceipt(receipt);
+      }
+
       public SalesReceipt GetSalesReceipt(DateTime time)
       {
          return salesReceipts[time] as SalesReceipt;

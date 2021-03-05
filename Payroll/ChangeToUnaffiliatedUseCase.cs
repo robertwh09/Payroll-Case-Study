@@ -12,7 +12,7 @@
          {
             UnionAffiliation unionAffiliation = affiliation as UnionAffiliation;
             int memberId = unionAffiliation.MemberId;
-            database.RemoveAffiliateMember(memberId);
+            database.DeleteAffiliateMember(memberId);
          }
       }
    }

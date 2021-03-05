@@ -47,9 +47,20 @@ namespace PayrollMySQLDB
             ExecuteNonQueryCommand(deleteExistingSalaryClassificationCommand, transaction);
             ExecuteNonQueryCommand(saveNewSalaryClassificationCommand, transaction);
 
-            //TODO need to save timecards within this transaction
-            //TODO need to save affiliations
-            //TODO need to save Paycheck address
+            //TODO1 need to persits all of the state relying on the employee
+            //delete old timecards
+            //add new timecards
+            //delete old sales receipts
+            //add new sales receipts
+            //update paycheck address
+            //update bank details
+            //delete employee affiliations, dues, servicecharges
+            //add employee affiliations, dues, servicecharges
+
+
+            //TODO so need to save a load all entities related to the employee
+            //do we add methods to the classes to extract the state
+            //or do we emmpower the classes to save their state when requested?
 
             transaction.Commit();
          }
@@ -147,6 +158,7 @@ namespace PayrollMySQLDB
             if (classificationToDelete is HourlyClassification)
             {
                CreateDeleteHourlyClassificationCommand();
+               //TODO1 need to delete Timecards?
             }
             else if (classificationToDelete is SalariedClassification)
             {
@@ -155,6 +167,7 @@ namespace PayrollMySQLDB
             else if (classificationToDelete is CommissionedClassification)
             {
                CreateDeleteComissionedClassificationCommand();
+               //TODO1 need to delete sales Receipts
             }
             CreateClassificationInsertCommand();//create insert for new classification
          }
@@ -275,11 +288,6 @@ namespace PayrollMySQLDB
       {
          string sql = "update HourlyClassification set HourlyRate=@HourlyRate, EmpId=@EmpId where EmpID=@EmpId";
          MySqlCommand command = LoadHourlySQLParameters(classification, sql);
-         
-         //TODO1 need to place this with the transaction
-         SaveTimeCardsOperation stc = new SaveTimeCardsOperation(employeeToSave, conn);
-         stc.Execute();
-
          return command;
       }
 

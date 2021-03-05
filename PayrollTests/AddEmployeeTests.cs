@@ -11,19 +11,14 @@ namespace Payroll.Tests
 
       [TestInitialize]
       public void TestInitialize()
-      {/*
-         this.database = new MySqlPayrollDatabase();
-         string connString = "Database=Payroll;Data Source=localhost;user id=sa;password=abc";
-         conn = new MySql.Data.MySqlClient.MySqlConnection(connString);
-         conn.Open();
-         */
+      {
          this.database = new InMemoryPayrollDatabase();
       }
 
       [TestCleanup]
       public void TestCleanup()
       {
-         //conn.Close();
+
       }
 
       [TestMethod()]

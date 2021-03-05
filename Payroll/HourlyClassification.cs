@@ -18,6 +18,7 @@ namespace Payroll
 
       public override double CalculatePay(Paycheck paycheck)
       {
+         
          double totalPay = 0.0;
          foreach (TimeCard timeCard in timeCards.Values)
          {
@@ -29,28 +30,47 @@ namespace Payroll
          return totalPay;
       }
 
-      private double CalculatePayForTimeCard(TimeCard card)
+      private double CalculatePayForTimeCard(TimeCard timeCard)
       {
-         double overtimeHours = Math.Max(0.0, card.Hours - 8);
-         double normalHours = card.Hours - overtimeHours;
+         double overtimeHours = Math.Max(0.0, timeCard.Hours - 8);
+         double normalHours = timeCard.Hours - overtimeHours;
          return hourlyRate * normalHours + hourlyRate * 1.5 * overtimeHours;
       }
 
-      public void AddTimeCard(TimeCard timeCard)
+      public void AddChangeTimeCard(DateTime date, double hours)
       {
-         //TODO save to database here
+         TimeCard timeCard = new TimeCard(date, hours);
          timeCards[timeCard.Date] = timeCard;
       }
-
-      public TimeCard GetTimeCard(DateTime dateTime)
+      public void AddChangeTimeCard(int empId, DateTime date, double hours, PayrollDatabase database)
       {
-         //TODO retrieve from database here
-         return timeCards[dateTime.Date] as TimeCard;
+         database.AddTimeCard(empId, new TimeCard(date, hours));
+         AddChangeTimeCard(date, hours);
       }
+
+      public TimeCard GetTimeCard(DateTime date)
+      {
+         if (timeCards[date] == null) return null;
+         return timeCards[date] as TimeCard;
+      }
+
+      private void  DeleteTimeCard(DateTime date)
+      {
+         timeCards.Remove(date);
+      }
+
+      public void DeleteTimeCard(int empId, DateTime date, PayrollDatabase database)
+      {
+         database.DeleteTimeCard(empId, date);
+         DeleteTimeCard(date);
+      }
+
+
       public Hashtable GetAllTimeCards()
       {
          return timeCards;
       }
+      
       public override string ToString()
       {
          return String.Format("${0}/hr", hourlyRate);

@@ -13,7 +13,14 @@ namespace Payroll
 
 		void AddAffiliateMember(int affilationId, Employee e);
 		Employee GetAffiliateMember(int affilationId);
-		void RemoveAffiliateMember(int affilationId);
+		void DeleteAffiliateMember(int affilationId);
+
+		void AddTimeCard(int empId, TimeCard timecard);
+		TimeCard GetTimeCard(int empId, DateTime date);
+		void DeleteTimeCard(int empId, DateTime date);
+
+		//ArrayList GetTimeCards(Employee employee);
+		//ArrayList GetTimeCards(Employee employee, DateTime startDate, DateTime dateTime);
 
 		//TODO1 need to add Service Charges
 		void AddAffiliateServiceCharge(int affId, DateTime date, double serviceCharge);

@@ -5,35 +5,41 @@ using System.Data;
 
 namespace PayrollMySQLDB
 {
-   class LoadTimeCardsOperation
-   {
+	class LoadTimeCardOperation
+	{
 		private readonly int empId;
+		private readonly DateTime date;
 		private readonly MySqlConnection connection;
 		private HourlyClassification hourlyClassification;
 
-		public LoadTimeCardsOperation(int empId, HourlyClassification hourlyClassification, MySqlConnection connection)
-      {
+		public LoadTimeCardOperation(int empId, DateTime date, MySqlConnection connection)
+		{
 			this.empId = empId;
+			this.date = date;
 			this.connection = connection;
-			this.hourlyClassification = hourlyClassification;
-      }
-		public void Execute()
+			//this.hourlyClassification = hourlyClassification;
+		}
+		public TimeCard Execute()
 		{
 			DataTable table = LoadDataTableFromCommand(Command);
-         foreach (DataRow row in table.Rows)
+			if (table.Rows.Count == 0)
          {
-            DateTime date = (DateTime)row["Date"];
-				double hours = (double)row["Hours"];
-				hourlyClassification.AddChangeTimeCard(date, hours);//load the timcards into memory
-			}
+				return null;
+         }
+			DataRow row = table.Rows[0];
+			DateTime date = (DateTime)row["Date"];
+			double hours = (double)row["Hours"];
+			TimeCard timeCard = new TimeCard(date, hours);
+			return timeCard;
 		}
 		public MySqlCommand Command
 		{
 			get
 			{
-				string sql = String.Format("select * from TimeCard where EmpId=@EmpId");
+				string sql = "SELECT Date, Hours FROM TimeCard WHERE (Date=@Date AND EmpId=@EmpID)";
 				MySqlCommand command = new MySqlCommand(sql, connection);
 				command.Parameters.AddWithValue("@EmpId", empId);
+				command.Parameters.AddWithValue("@Date", date);
 				return command;
 			}
 		}
@@ -46,3 +52,4 @@ namespace PayrollMySQLDB
 		}
 	}
 }
+

@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Payroll
 {
-   public class AddTimeCardUseCase : UseCase
+   public class AddChangeTimeCardUseCase : UseCase
    {
       private readonly DateTime date;
       private readonly double hours;
       private readonly int empId;
-      public AddTimeCardUseCase(DateTime date, double hours, int empId, PayrollDatabase database) : base (database)
+      public AddChangeTimeCardUseCase(int empId, DateTime date, double hours, PayrollDatabase database) : base (database)
       {
          this.date = date;
          this.hours = hours;
@@ -22,11 +22,11 @@ namespace Payroll
          {
             HourlyClassification hc = e.Classification as HourlyClassification;
             if (hc != null)
-               hc.AddTimeCard(new TimeCard(date, hours));
+            {
+               hc.AddChangeTimeCard(empId, date, hours, database);
+            }
             else
-               throw new InvalidOperationException(
-               "Tried to add timecard to" +
-               "non-hourly employee");
+               throw new InvalidOperationException("Tried to add timecard to non-hourly employee");
          }
          else
             throw new InvalidOperationException("No such employee.");
